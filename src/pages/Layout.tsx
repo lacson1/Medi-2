@@ -37,7 +37,7 @@ export default function Layout() {
     if (path.includes('/lab-orders')) return 'Lab Orders';
     if (path.includes('/prescriptions')) return 'Prescriptions';
     if (path.includes('/billing')) return 'Billing';
-    return 'MediFlow';
+    return 'MEDI 2';
   };
 
   return (

@@ -1,6 +1,6 @@
-# MediFlow - Medical Practice Management System
+# MEDI 2 - Medical Practice Management System
 
-A comprehensive medical practice management system built with React and Vite. MediFlow provides healthcare professionals with tools to manage patients, appointments, billing, and medical records efficiently.
+A comprehensive medical practice management system built with React and Vite. MEDI 2 provides healthcare professionals with tools to manage patients, appointments, billing, and medical records efficiently.
 
 ## 🏥 Features
 
@@ -47,8 +47,8 @@ A comprehensive medical practice management system built with React and Vite. Me
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/mediflow.git
-   cd mediflow
+   git clone https://github.com/your-username/medi-2.git
+   cd medi-2
    ```
 
 2. **Install dependencies**
@@ -91,7 +91,7 @@ VITE_ENABLE_DEBUG_MODE=true
 
 ## 🧪 Testing
 
-MediFlow includes comprehensive testing infrastructure:
+MEDI 2 includes comprehensive testing infrastructure:
 
 ### Unit & Integration Tests
 
@@ -174,7 +174,7 @@ src/
 1. **Build the application**
 
    ```bash
-   docker build -t mediflow .
+   docker build -t medi-2 .
    ```
 
 2. **Run with Docker Compose**
@@ -245,7 +245,7 @@ VITE_USE_MOCK_DATA=false
 
 ## 🔒 Security
 
-MediFlow implements comprehensive security measures:
+MEDI 2 implements comprehensive security measures:
 
 - **Authentication**: JWT-based authentication
 - **Authorization**: Role-based access control (RBAC)
@@ -262,7 +262,7 @@ MediFlow implements comprehensive security measures:
 - **Documentation**: Check the docs/ folder for detailed guides
 - **Issues**: Report bugs and request features via GitHub Issues
 - **Discussions**: Join community discussions in GitHub Discussions
-- **Email**: Contact support at [support@mediflow.com](mailto:support@mediflow.com)
+- **Email**: Contact support at [support@medi-2.com](mailto:support@medi-2.com)
 
 ### Troubleshooting
 
@@ -284,4 +284,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**MediFlow** - Streamlining healthcare management for the modern world.
+**MEDI 2** - Streamlining healthcare management for the modern world.

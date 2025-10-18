@@ -10,7 +10,7 @@ export default function LoginPage() {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-    await login({ email: 'dev@bluequee2.com', password: 'dev' });
+    await login({ email: 'dev@medi-2.com', password: 'dev' });
     navigate('/Dashboard');
   };
 
@@ -25,10 +25,10 @@ export default function LoginPage() {
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
-              Bluequee2
+              MEDI 2
             </CardTitle>
             <p className="text-gray-600 text-sm">
-              Clinical Workspace Management System
+              Medical Practice Management System
             </p>
           </CardHeader>
 

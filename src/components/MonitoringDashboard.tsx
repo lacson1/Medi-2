@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle, 
-  XCircle, 
-  RefreshCw, 
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  RefreshCw,
   Trash2,
   Download,
   Clock
@@ -60,7 +60,7 @@ export default function MonitoringDashboard() {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `mediflow-errors-${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `medi-2-errors-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -94,8 +94,8 @@ export default function MonitoringDashboard() {
           <h1 className="text-2xl font-bold text-gray-900">System Monitoring</h1>
           <p className="text-gray-600">Monitor application health and track errors</p>
         </div>
-        <Button 
-          onClick={runHealthChecks} 
+        <Button
+          onClick={runHealthChecks}
           disabled={isLoading}
           className="flex items-center gap-2"
         >
@@ -169,18 +169,18 @@ export default function MonitoringDashboard() {
               </p>
             </div>
             <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={exportErrors}
                 disabled={storedErrors.length === 0}
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={clearStoredErrors}
                 disabled={storedErrors.length === 0}
               >

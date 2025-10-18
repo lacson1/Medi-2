@@ -28,7 +28,7 @@ export default function StaffPerformance() {
     end: new Date().toISOString().split('T')[0]
   });
 
-  const [organizationId, setOrganizationId] = useState('test-org-001-agent-mediflow');
+  const [organizationId, setOrganizationId] = useState('test-org-001-agent-medi-2');
   const [sortBy, setSortBy] = useState('productivity');
   const [roleFilter, setRoleFilter] = useState('all');
 

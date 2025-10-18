@@ -1,7 +1,7 @@
 {
-    "name": "mediflow-backend",
+    "name": "medi-2-backend",
     "version": "1.0.0",
-    "description": "MediFlow Backend API Server",
+    "description": "MEDI 2 Backend API Server",
     "main": "src/server.js",
     "type": "module",
     "scripts": {
@@ -50,6 +50,6 @@
         "express",
         "postgresql"
     ],
-    "author": "MediFlow Team",
+    "author": "MEDI 2 Team",
     "license": "MIT"
 }

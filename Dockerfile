@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for MediFlow
+# Multi-stage Dockerfile for MEDI 2
 # Stage 1: Build the application
 FROM node:18-alpine AS builder
 
