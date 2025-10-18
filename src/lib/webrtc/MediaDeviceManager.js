@@ -282,7 +282,7 @@ export class MediaDeviceManager {
      * Check if device is available
      */
     isDeviceAvailable(deviceType, deviceId) {
-        return this.devices[deviceType]?.some(device => device.deviceId === deviceId) || false;
+        return this.devices[deviceType] ? .some(device => device.deviceId === deviceId) || false;
     }
 
     /**
