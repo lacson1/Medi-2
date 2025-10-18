@@ -1,5 +1,5 @@
 /**
- * Real API Client for MediFlow Application
+ * Real API Client for MEDI 2 Application
  * Connects to the actual backend API endpoints
  */
 

@@ -1,6 +1,6 @@
 /**
  * Enhanced API Client with comprehensive error handling, retry logic, and monitoring
- * Centralized API communication layer for MediFlow application
+ * Centralized API communication layer for MEDI 2 application
  * Now uses real backend API instead of mock data
  */
 
