@@ -1,0 +1,117 @@
+# Docker Compose for Development
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: mediflow-postgres
+    environment:
+      POSTGRES_DB: mediflow
+      POSTGRES_USER: mediflow
+      POSTGRES_PASSWORD: mediflow123
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mediflow -d mediflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediflow-network
+
+  # Backend API Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mediflow-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=mediflow
+      - DB_USER=mediflow
+      - DB_PASSWORD=mediflow123
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - FRONTEND_URL=http://localhost:5173
+    volumes:
+      # Mount source code for hot reloading in development
+      - ./backend/src:/app/src:ro
+      - ./backend/package.json:/app/package.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "src/healthcheck.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - mediflow-network
+
+  # Frontend Application
+  frontend:
+    build: .
+    container_name: mediflow-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3001/api
+      - VITE_USE_MOCK_DATA=false
+      - VITE_ENABLE_DEBUG_MODE=true
+    volumes:
+      # Mount source code for hot reloading in development
+      - ./src:/app/src:ro
+      - ./public:/app/public:ro
+      # Mount nginx config for development
+      - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - mediflow-network
+
+  # Optional: Add a reverse proxy for development
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: mediflow-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.proxy.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - mediflow-network
+
+networks:
+  mediflow-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  mediflow-data:
+    driver: local

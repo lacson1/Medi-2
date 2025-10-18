@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -72,87 +71,573 @@ button:focus-visible {
   }
 } */
 
-
+@layer base {
+     :root {
+        /* Google-style Calm Color System - Light Theme */
+        --background: 210 40% 98%;
+        --foreground: 210 20% 15%;
+        --card: 0 0% 100%;
+        --card-foreground: 210 20% 15%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 210 20% 15%;
+        /* Soft Blue Primary Colors - Calm and Professional */
+        --primary: 210 100% 50%;
+        --primary-foreground: 0 0% 100%;
+        --primary-container: 210 100% 95%;
+        --on-primary-container: 210 100% 15%;
+        /* Soft Blue-Gray Secondary Colors */
+        --secondary: 210 20% 96%;
+        --secondary-foreground: 210 20% 20%;
+        --secondary-container: 210 20% 92%;
+        --on-secondary-container: 210 20% 25%;
+        /* Calm Tertiary Colors - Soft Teal */
+        --tertiary: 180 30% 85%;
+        --tertiary-foreground: 180 30% 25%;
+        --tertiary-container: 180 30% 90%;
+        --on-tertiary-container: 180 30% 20%;
+        /* Clean Surface Colors */
+        --surface: 0 0% 100%;
+        --surface-foreground: 210 20% 15%;
+        --surface-variant: 210 20% 96%;
+        --on-surface-variant: 210 20% 45%;
+        /* Soft Error Colors */
+        --error: 0 70% 55%;
+        --error-foreground: 0 0% 100%;
+        --error-container: 0 100% 95%;
+        --on-error-container: 0 100% 15%;
+        /* Subtle Outline Colors */
+        --outline: 210 20% 88%;
+        --outline-variant: 210 20% 92%;
+        /* Legacy support */
+        --muted: 210 20% 96%;
+        --muted-foreground: 210 20% 45%;
+        --accent: 210 20% 96%;
+        --accent-foreground: 210 20% 20%;
+        --destructive: 0 70% 55%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 210 20% 88%;
+        --input: 210 20% 88%;
+        --ring: 210 100% 50%;
+        /* Chart Colors - Calm Blue Palette */
+        --chart-1: 210 100% 50%;
+        --chart-2: 180 50% 45%;
+        --chart-3: 200 80% 55%;
+        --chart-4: 160 60% 50%;
+        --chart-5: 220 70% 60%;
+        --radius: 0.75rem;
+        /* Sidebar Colors - Calm Blue Theme */
+        --sidebar-background: 210 30% 98%;
+        --sidebar-foreground: 210 20% 25%;
+        --sidebar-primary: 210 100% 50%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 210 20% 95%;
+        --sidebar-accent-foreground: 210 20% 20%;
+        --sidebar-border: 210 20% 90%;
+        --sidebar-ring: 210 100% 50%;
+    }
+    .dark {
+        /* Google-style Calm Color System - Dark Theme */
+        --background: 210 25% 8%;
+        --foreground: 210 20% 90%;
+        --card: 210 20% 10%;
+        --card-foreground: 210 20% 90%;
+        --popover: 210 20% 10%;
+        --popover-foreground: 210 20% 90%;
+        /* Soft Blue Primary Colors - Dark */
+        --primary: 210 100% 65%;
+        --primary-foreground: 210 25% 8%;
+        --primary-container: 210 100% 20%;
+        --on-primary-container: 210 100% 90%;
+        /* Soft Blue-Gray Secondary Colors - Dark */
+        --secondary: 210 20% 15%;
+        --secondary-foreground: 210 20% 90%;
+        --secondary-container: 210 20% 20%;
+        --on-secondary-container: 210 20% 85%;
+        /* Calm Tertiary Colors - Dark Teal */
+        --tertiary: 180 30% 25%;
+        --tertiary-foreground: 180 30% 90%;
+        --tertiary-container: 180 30% 30%;
+        --on-tertiary-container: 180 30% 85%;
+        /* Clean Surface Colors - Dark */
+        --surface: 210 20% 10%;
+        --surface-foreground: 210 20% 90%;
+        --surface-variant: 210 20% 15%;
+        --on-surface-variant: 210 20% 80%;
+        /* Soft Error Colors - Dark */
+        --error: 0 70% 65%;
+        --error-foreground: 210 25% 8%;
+        --error-container: 0 100% 20%;
+        --on-error-container: 0 100% 90%;
+        /* Subtle Outline Colors - Dark */
+        --outline: 210 20% 25%;
+        --outline-variant: 210 20% 20%;
+        /* Legacy support */
+        --muted: 210 20% 15%;
+        --muted-foreground: 210 20% 65%;
+        --accent: 210 20% 15%;
+        --accent-foreground: 210 20% 90%;
+        --destructive: 0 70% 65%;
+        --destructive-foreground: 210 25% 8%;
+        --border: 210 20% 25%;
+        --input: 210 20% 25%;
+        --ring: 210 100% 65%;
+        /* Chart Colors - Calm Blue Palette - Dark */
+        --chart-1: 210 100% 65%;
+        --chart-2: 180 50% 60%;
+        --chart-3: 200 80% 70%;
+        --chart-4: 160 60% 65%;
+        --chart-5: 220 70% 75%;
+        /* Sidebar Colors - Calm Blue Theme - Dark */
+        --sidebar-background: 210 25% 8%;
+        --sidebar-foreground: 210 20% 90%;
+        --sidebar-primary: 210 100% 65%;
+        --sidebar-primary-foreground: 210 25% 8%;
+        --sidebar-accent: 210 20% 15%;
+        --sidebar-accent-foreground: 210 20% 90%;
+        --sidebar-border: 210 20% 20%;
+        --sidebar-ring: 210 100% 65%;
+    }
+}
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Roboto', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-weight: 400;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
 }
 
 
+/* Google Material Design 3 Typography System */
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+@layer components {
+    /* Display Styles - Large headlines for hero sections */
+    .text-display-large {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 3.5rem;
+        /* 56px */
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: -0.025em;
+    }
+    .text-display-medium {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 2.8125rem;
+        /* 45px */
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: 0;
+    }
+    .text-display-small {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 2.25rem;
+        /* 36px */
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: 0;
+    }
+    /* Headline Styles - Section headers */
+    .text-headline-large {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 2rem;
+        /* 32px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+    }
+    .text-headline-medium {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.75rem;
+        /* 28px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+    }
+    .text-headline-small {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.5rem;
+        /* 24px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+    }
+    /* Title Styles - Card titles, dialog headers */
+    .text-title-large {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.375rem;
+        /* 22px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+    }
+    .text-title-medium {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1rem;
+        /* 16px */
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.009375em;
+    }
+    .text-title-small {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.00625em;
+    }
+    /* Label Styles - Form labels, buttons */
+    .text-label-large {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.00625em;
+    }
+    .text-label-medium {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.75rem;
+        /* 12px */
+        font-weight: 500;
+        line-height: 1.33;
+        letter-spacing: 0.03125em;
+    }
+    .text-label-small {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.6875rem;
+        /* 11px */
+        font-weight: 500;
+        line-height: 1.45;
+        letter-spacing: 0.03125em;
+    }
+    /* Body Styles - Main content text */
+    .text-body-large {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1rem;
+        /* 16px */
+        font-weight: 400;
+        line-height: 1.5;
+        letter-spacing: 0.009375em;
+    }
+    .text-body-medium {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 400;
+        line-height: 1.43;
+        letter-spacing: 0.015625em;
+    }
+    .text-body-small {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.75rem;
+        /* 12px */
+        font-weight: 400;
+        line-height: 1.33;
+        letter-spacing: 0.025em;
+    }
+    /* Google-style component text classes */
+    .btn-text {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.00625em;
+    }
+    .input-text {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1rem;
+        /* 16px */
+        font-weight: 400;
+        line-height: 1.5;
+        letter-spacing: 0.009375em;
+    }
+    .card-title {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.25rem;
+        /* 20px */
+        font-weight: 500;
+        line-height: 1.4;
+        letter-spacing: 0;
+    }
+    .card-subtitle {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 400;
+        line-height: 1.43;
+        letter-spacing: 0.015625em;
+        color: hsl(var(--muted-foreground));
+    }
+    .nav-text {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.00625em;
+    }
+    .badge-text {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.75rem;
+        /* 12px */
+        font-weight: 500;
+        line-height: 1.33;
+        letter-spacing: 0.03125em;
+    }
+    /* Google-style headings */
+    h1 {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 2rem;
+        /* 32px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+        margin: 0;
+    }
+    h2 {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.75rem;
+        /* 28px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+        margin: 0;
+    }
+    h3 {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.5rem;
+        /* 24px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+        margin: 0;
+    }
+    h4 {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1.375rem;
+        /* 22px */
+        font-weight: 400;
+        line-height: 1.25;
+        letter-spacing: 0;
+        margin: 0;
+    }
+    h5 {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1rem;
+        /* 16px */
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.009375em;
+        margin: 0;
+    }
+    h6 {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 0.875rem;
+        /* 14px */
+        font-weight: 500;
+        line-height: 1.43;
+        letter-spacing: 0.00625em;
+        margin: 0;
+    }
+    /* Google-style paragraph */
+    p {
+        font-family: 'Roboto', 'Google Sans', sans-serif;
+        font-size: 1rem;
+        /* 16px */
+        font-weight: 400;
+        line-height: 1.5;
+        letter-spacing: 0.009375em;
+        margin: 0;
+    }
+}
+
+
+/* Google-style Calm Gradients and Utilities */
+
+@layer utilities {
+    /* Calm Blue Gradients */
+    .bg-gradient-calm-blue {
+        background: linear-gradient(135deg, hsl(210 100% 95%) 0%, hsl(210 40% 98%) 100%);
+    }
+    .bg-gradient-calm-primary {
+        background: linear-gradient(135deg, hsl(210 100% 50%) 0%, hsl(210 100% 60%) 100%);
+    }
+    .bg-gradient-calm-surface {
+        background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    }
+    .bg-gradient-calm-card {
+        background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 20% 99%) 100%);
+    }
+    /* Soft Shadow Utilities */
+    .shadow-calm-sm {
+        box-shadow: 0 1px 2px 0 hsl(210 20% 0% / 0.05);
+    }
+    .shadow-calm {
+        box-shadow: 0 1px 3px 0 hsl(210 20% 0% / 0.1), 0 1px 2px -1px hsl(210 20% 0% / 0.1);
+    }
+    .shadow-calm-md {
+        box-shadow: 0 4px 6px -1px hsl(210 20% 0% / 0.1), 0 2px 4px -2px hsl(210 20% 0% / 0.1);
+    }
+    .shadow-calm-lg {
+        box-shadow: 0 10px 15px -3px hsl(210 20% 0% / 0.1), 0 4px 6px -4px hsl(210 20% 0% / 0.1);
+    }
+    /* Calm Border Utilities */
+    .border-calm {
+        border-color: hsl(210 20% 88%);
+    }
+    .border-calm-light {
+        border-color: hsl(210 20% 92%);
+    }
+    /* Calm Text Colors */
+    .text-calm-primary {
+        color: hsl(210 100% 50%);
+    }
+    .text-calm-secondary {
+        color: hsl(210 20% 45%);
+    }
+    .text-calm-muted {
+        color: hsl(210 20% 60%);
+    }
+    /* Calm Background Colors */
+    .bg-calm-primary {
+        background-color: hsl(210 100% 50%);
+    }
+    .bg-calm-primary-light {
+        background-color: hsl(210 100% 95%);
+    }
+    .bg-calm-secondary {
+        background-color: hsl(210 20% 96%);
+    }
+    .bg-calm-surface {
+        background-color: hsl(210 20% 98%);
+    }
+    /* Hover States */
+    .hover-calm-primary:hover {
+        background-color: hsl(210 100% 45%);
+    }
+    .hover-calm-secondary:hover {
+        background-color: hsl(210 20% 92%);
+    }
+    /* Focus States */
+    .focus-calm:focus {
+        outline: 2px solid hsl(210 100% 50%);
+        outline-offset: 2px;
+    }
+    .focus-calm-ring:focus {
+        box-shadow: 0 0 0 3px hsl(210 100% 50% / 0.2);
+    }
+}
+
+
+/* Animation delay utilities for PatientSession component */
+
+.animation-delay-100 {
+    animation-delay: 0.1s;
+}
+
+.animation-delay-200 {
+    animation-delay: 0.2s;
+}
+
+
+/* Progress bar utilities for LabInventoryManager */
+
+.progress-bar {
+    width: var(--progress-width, 0%);
+}
+
+
+/* Dynamic progress bar widths - generated classes for common percentages */
+
+.progress-0 {
+    width: 0%;
+}
+
+.progress-5 {
+    width: 5%;
+}
+
+.progress-10 {
+    width: 10%;
+}
+
+.progress-15 {
+    width: 15%;
+}
+
+.progress-20 {
+    width: 20%;
+}
+
+.progress-25 {
+    width: 25%;
+}
+
+.progress-30 {
+    width: 30%;
+}
+
+.progress-35 {
+    width: 35%;
+}
+
+.progress-40 {
+    width: 40%;
+}
+
+.progress-45 {
+    width: 45%;
+}
+
+.progress-50 {
+    width: 50%;
+}
+
+.progress-55 {
+    width: 55%;
+}
+
+.progress-60 {
+    width: 60%;
+}
+
+.progress-65 {
+    width: 65%;
+}
+
+.progress-70 {
+    width: 70%;
+}
+
+.progress-75 {
+    width: 75%;
+}
+
+.progress-80 {
+    width: 80%;
+}
+
+.progress-85 {
+    width: 85%;
+}
+
+.progress-90 {
+    width: 90%;
+}
+
+.progress-95 {
+    width: 95%;
+}
+
+.progress-100 {
+    width: 100%;
 }

@@ -1,0 +1,211 @@
+/* DiagnosisAnalysis component styles */
+
+.colorIndicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color);
+    flex-shrink: 0;
+}
+
+.progressBar {
+    width: 100px;
+    height: 6px;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progressBarFill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progressBarFillBlue {
+    background-color: #3b82f6;
+}
+
+.progressBarFillGreen {
+    background-color: #10b981;
+}
+
+.progressBarFillPurple {
+    background-color: #8b5cf6;
+}
+
+.progressBarFillOrange {
+    background-color: #f59e0b;
+}
+
+.progressBarFillRed {
+    background-color: #ef4444;
+}
+
+.progressBarFillPink {
+    background-color: #ec4899;
+}
+
+.progressBarFillIndigo {
+    background-color: #6366f1;
+}
+
+.progressBarFillTeal {
+    background-color: #14b8a6;
+}
+
+.progressBarFillYellow {
+    background-color: #eab308;
+}
+
+.progressBarFillGray {
+    background-color: #6b7280;
+}
+
+.chartContainer {
+    height: 300px;
+    width: 100%;
+}
+
+.chartLegend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.chartLegendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chartLegendColor {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color);
+}
+
+.chartLegendLabel {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.demographicsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.demographicsItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.demographicsLabel {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.demographicsValue {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.statCard {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.25rem;
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.trendIndicator {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.trendUp {
+    color: #10b981;
+}
+
+.trendDown {
+    color: #ef4444;
+}
+
+.trendNeutral {
+    color: #6b7280;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.loadingSkeleton {
+    height: 1rem;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 0.25rem;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.emptyState {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+}
+
+.emptyStateIcon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1rem;
+    color: #d1d5db;
+}
+
+.emptyStateTitle {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+.emptyStateDescription {
+    font-size: 0.875rem;
+    color: #6b7280;
+}

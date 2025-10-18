@@ -1,26 +1,171 @@
-# Logs
-logs
-*.log
+# Dependencies
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-.env
+# Testing
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Docker
+.dockerignore
+
+# Quality gates
+.quality/
+
+# Coordination files
+.coordination/
+
+# Cursor specific
+.cursor/
+.cursorindexingignore
+
+# Spec story
+.specstory/
+
+# Audit results
+audit-ci.json
+
+# Lighthouse results
+lighthouserc.json
+
+# Deployment
+deploy.sh
+coordinate.sh
+quality-gates.sh
+
+# Scripts
+fix-all-jsx.sh
+fix-all-syntax.sh
+fix-syntax.sh
+test-api.sh
+test-ui-components.sh
+test-document-generation.js
+test-postmessage-fix.html
+
+# Backend specific
+backend/logs/
+backend/node_modules/
+
+# Production files
+docker-compose.prod.yml
+env.production.example
+
+# Documentation that might be generated
+docs/generated/
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional: Uncomment if you want to ignore these
+# .htaccess
+# nginx.conf
+# nginx.dev.conf
+# Dockerfile
+# docker-compose.yml
