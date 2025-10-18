@@ -41,14 +41,14 @@
     "include": [
         "src/**/*",
         "src/**/*.ts",
-        "src/**/*.tsx",
-        "vitest.config.ts"
+        "src/**/*.tsx"
     ],
     "exclude": [
         "node_modules",
         "dist",
         "coverage",
-        "test-results"
+        "test-results",
+        "vitest.config.d.ts"
     ],
     "references": [
         {

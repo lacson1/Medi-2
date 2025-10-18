@@ -533,7 +533,7 @@ export class ConsentManager {
             }
         };
 
-        const rules = maskingRules[userRole] ? .[dataType] || [];
+        const rules = maskingRules[userRole]?.[dataType] || [];
 
         rules.forEach(field => {
             if (maskedData[field]) {
@@ -643,7 +643,7 @@ export class ConsentManager {
         // Log audit event
         await auditLogger.logDataExport(
             patientId,
-            privacyPreferences ? .patientName || 'Unknown',
+            privacyPreferences?.patientName || 'Unknown',
             'gdpr_export', {
                 requestedBy,
                 exportType: 'gdpr_export',
@@ -677,7 +677,7 @@ export class ConsentManager {
             resourceId: patientId,
             resourceType: 'data_deletion',
             patientId,
-            patientName: privacyPreferences ? .patientName || 'Unknown',
+            patientName: privacyPreferences?.patientName || 'Unknown',
             details: {
                 requestedBy,
                 reason,
