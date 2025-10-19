@@ -471,39 +471,62 @@ export interface MedicalDocumentTemplate extends BaseEntity {
     organization_id?: string;
 }
 
-export interface Prescription extends BaseEntity {
-    patient_id: string;
-    doctor_id: string;
-    medication_name: string;
-    dosage: string;
-    frequency: string;
-    duration: string;
-    instructions?: string;
-    status: 'active' | 'completed' | 'cancelled';
+// Specialist entity
+export interface Specialist extends BaseEntity {
+    full_name: string;
+    specialty: string;
+    email: string;
+    phone: string;
+    license_number: string;
+    years_of_experience: number;
+    qualifications: string[];
+    languages: string[];
+    consultation_fee: number;
+    availability: {
+        monday?: { start: string; end: string };
+        tuesday?: { start: string; end: string };
+        wednesday?: { start: string; end: string };
+        thursday?: { start: string; end: string };
+        friday?: { start: string; end: string };
+        saturday?: { start: string; end: string };
+        sunday?: { start: string; end: string };
+    };
+    bio: string;
     organization_id?: string;
 }
 
-export interface LabOrder extends BaseEntity {
+// Specialty Consultation entity
+export interface SpecialtyConsultation extends BaseEntity {
     patient_id: string;
-    doctor_id: string;
-    test_name: string;
-    test_code?: string;
-    instructions?: string;
-    status: 'ordered' | 'collected' | 'processing' | 'completed' | 'cancelled';
-    results?: string;
+    patient_name: string;
+    specialist_id: string;
+    specialist_name: string;
+    template_id: string;
+    template_name: string;
+    consultation_date: string;
+    status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+    summary: string;
+    consultation_data: Record<string, unknown>;
     organization_id?: string;
 }
 
-export interface Encounter extends BaseEntity {
-    patient_id: string;
-    doctor_id: string;
-    encounter_date: string;
-    encounter_type: 'initial' | 'follow_up' | 'emergency' | 'procedure';
-    chief_complaint: string;
-    diagnosis?: string;
-    treatment_plan?: string;
-    notes?: string;
-    status: 'in_progress' | 'completed' | 'cancelled';
+// Consultation Analytics entity
+export interface ConsultationAnalytics extends BaseEntity {
+    period: string; // 'daily', 'weekly', 'monthly', 'yearly'
+    date_range: {
+        start: string;
+        end: string;
+    };
+    metrics: {
+        total_consultations: number;
+        completed_consultations: number;
+        pending_consultations: number;
+        cancelled_consultations: number;
+        average_duration: number;
+        specialist_utilization: Record<string, number>;
+        specialty_distribution: Record<string, number>;
+        patient_satisfaction: number;
+    };
     organization_id?: string;
 }
 
@@ -543,6 +566,6 @@ export interface HealthCheckResult {
 export interface BatchResult {
     operation: BatchOperation;
     success: boolean;
-    data: unknown | null;
+    data: Record<string, unknown> | null;
     error: Error | null;
 }

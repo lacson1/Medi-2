@@ -21,7 +21,7 @@ export default function PatientEncounters({ notes, isLoading, onEdit, onView, on
     );
   }
 
-  if (notes.length === 0) {
+  if (!notes || notes.length === 0) {
     return (
       <div className="text-center py-12">
         <FileText className="w-16 h-16 mx-auto text-gray-300 mb-4" />
@@ -76,7 +76,7 @@ export default function PatientEncounters({ notes, isLoading, onEdit, onView, on
               <p className="text-gray-900 font-medium">{note.chief_complaint}</p>
             </div>
           )}
-          
+
           <div className="space-y-3 text-sm">
             {note.assessment && <p><span className="font-semibold">Assessment:</span> {note.assessment}</p>}
             {note.plan && <p><span className="font-semibold">Plan:</span> {note.plan}</p>}

@@ -21,6 +21,7 @@ interface AuthContextType {
     hasRole: (role: string) => boolean;
     hasAnyRole: (roles: string[]) => boolean;
     checkAuthStatus: () => Promise<void>;
+    switchToSuperAdmin: () => void;
     // Organization selection
     showOrgSelector: boolean;
     setShowOrgSelector: (show: boolean) => void;
@@ -34,7 +35,7 @@ interface AuthProviderProps {
 }
 
 // Create AuthContext
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 // Auth Provider Component
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -90,8 +91,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
             // Check if we have a stored token
             const token = localStorage.getItem('auth_token');
             if (!token) {
-                setUser(null);
-                setIsAuthenticated(false);
+                // For development, create a SuperAdmin user
+                const superAdminUser: AuthUser = {
+                    id: 'superadmin-dev-001',
+                    first_name: 'Super',
+                    last_name: 'Admin',
+                    email: 'superadmin@mediflow.com',
+                    role: 'SuperAdmin',
+                    roleColor: getRoleColor('SuperAdmin'),
+                    permissions: ['full_system_access', 'user_management', 'organization_management'],
+                    organization: 'MedFlow System',
+                    is_active: true
+                };
+
+                setUser(superAdminUser);
+                setIsAuthenticated(true);
                 setLoading(false);
                 return;
             }
@@ -119,11 +133,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 setUser(authUser);
                 setIsAuthenticated(true);
             } else {
-                // Invalid token, clear it
+                // Invalid token, clear it and create SuperAdmin user
                 localStorage.removeItem('auth_token');
                 realApiClient.setToken(null);
-                setUser(null);
-                setIsAuthenticated(false);
+
+                const superAdminUser: AuthUser = {
+                    id: 'superadmin-dev-001',
+                    first_name: 'Super',
+                    last_name: 'Admin',
+                    email: 'superadmin@mediflow.com',
+                    role: 'SuperAdmin',
+                    roleColor: getRoleColor('SuperAdmin'),
+                    permissions: ['full_system_access', 'user_management', 'organization_management'],
+                    organization: 'MedFlow System',
+                    is_active: true
+                };
+
+                setUser(superAdminUser);
+                setIsAuthenticated(true);
             }
 
             setLoading(false);
@@ -295,6 +322,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return roles.includes(user.role);
     };
 
+    const switchToSuperAdmin = (): void => {
+        const superAdminUser: AuthUser = {
+            id: 'superadmin-dev-001',
+            first_name: 'Super',
+            last_name: 'Admin',
+            email: 'superadmin@mediflow.com',
+            role: 'SuperAdmin',
+            roleColor: getRoleColor('SuperAdmin'),
+            permissions: ['full_system_access', 'user_management', 'organization_management'],
+            organization: 'MedFlow System',
+            is_active: true
+        };
+
+        setUser(superAdminUser);
+        setIsAuthenticated(true);
+
+        // Clear any existing token to ensure SuperAdmin mode
+        localStorage.removeItem('auth_token');
+        realApiClient.setToken(null);
+
+        console.log('✅ Switched to SuperAdmin mode');
+    };
+
     const value: AuthContextType = {
         user,
         loading,
@@ -306,6 +356,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         hasRole,
         hasAnyRole,
         checkAuthStatus,
+        switchToSuperAdmin,
         // Organization selection
         showOrgSelector,
         setShowOrgSelector,

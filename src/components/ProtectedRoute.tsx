@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { PageLoading } from '@/components/Loading';
 import { PermissionManager, ROUTE_PERMISSIONS } from '@/utils/permissionMatrix.jsx';
 import { Shield, AlertCircle } from 'lucide-react';

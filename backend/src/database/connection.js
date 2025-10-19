@@ -12,15 +12,15 @@ const { Pool } = pg;
 // Database configuration
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5434, // Fixed: Changed from 5432 to 5434 to match Docker
+    port: parseInt(process.env.DB_PORT) || 5432, // Use standard PostgreSQL port
     database: process.env.DB_NAME || 'mediflow',
     user: process.env.DB_USER || 'mediflow',
     password: process.env.DB_PASSWORD || 'mediflow123',
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-    max: 20, // Maximum number of clients in the pool
-    idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-    connectionTimeoutMillis: 10000, // Increased timeout for better reliability
-    retryDelayMillis: 2000, // Delay between retry attempts
+    max: parseInt(process.env.DB_MAX_CONNECTIONS) || 20, // Maximum number of clients in the pool
+    idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT) || 30000, // Close idle clients after 30 seconds
+    connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT) || 10000, // Increased timeout for better reliability
+    retryDelayMillis: parseInt(process.env.DB_RETRY_DELAY) || 2000, // Delay between retry attempts
 };
 
 // Create connection pool

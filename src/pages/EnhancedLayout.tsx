@@ -1,70 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { useAuth } from '@/contexts/AuthContext';
-import {
-    LayoutDashboard,
-    Users,
-    Stethoscope,
-    ChevronsLeft,
-    ChevronsRight,
-    FileText,
-    DollarSign,
-    User,
-    LogOut,
-    Calendar,
-    Building2,
-    Shield,
-    Beaker,
-    Activity,
-    Pill,
-    TestTube,
-    BarChart3,
-    ArrowUpRightSquare,
-    ClipboardList,
-    Video,
-    Search,
-    Bell,
-    Settings,
-    HelpCircle,
-    Zap,
-    Star,
-    Clock,
-    TrendingUp,
-    Filter,
-    MoreHorizontal,
-    Bookmark,
-    History,
-    Plus,
-    Grid3X3,
-    List,
-    Maximize2,
-    Minimize2
-} from 'lucide-react';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarHeader,
-    SidebarFooter,
-    SidebarProvider,
-    SidebarTrigger,
-    useSidebar,
-} from '@/components/ui/sidebar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/hooks/useAuth';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+import AppSidebar from '@/components/navigation/AppSidebar';
+import CleanTopBar from '@/components/navigation/CleanTopBar';
 
 // Enhanced navigation structure with better organization
 const WORKSPACE_SECTIONS = {
@@ -355,97 +296,16 @@ const AppSidebar = () => {
 
 // Enhanced Layout Component
 export default function EnhancedLayout({ children, currentPageName }: any) {
-    const [workspaceMode, setWorkspaceMode] = useState('default'); // default, compact, fullscreen
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-    const [notifications, setNotifications] = useState([]);
-
-    const toggleWorkspaceMode = () => {
-        const modes = ['default', 'compact', 'fullscreen'];
-        const currentIndex = modes.indexOf(workspaceMode);
-        setWorkspaceMode(modes[(currentIndex + 1) % modes.length]);
-    };
-
-    const getLayoutClasses = () => {
-        switch (workspaceMode) {
-            case 'compact':
-                return 'sidebar-compact';
-            case 'fullscreen':
-                return 'sidebar-hidden';
-            default:
-                return 'sidebar-default';
-        }
-    };
+    const { user } = useAuth();
+    const location = useLocation();
 
     return (
         <SidebarProvider>
-            <div className={cn("flex h-screen bg-gray-50", getLayoutClasses())}>
+            <div className="flex h-screen bg-gray-50">
                 <AppSidebar />
 
                 <div className="flex-1 flex flex-col overflow-hidden">
-                    {/* Enhanced Top Bar */}
-                    <div className="bg-white border-b border-gray-200 px-6 py-3">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                                <SidebarTrigger className="hover:bg-gray-100" />
-
-                                <Separator orientation="vertical" className="h-6" />
-
-                                <div className="flex items-center space-x-2">
-                                    <h1 className="text-lg font-semibold text-gray-900">
-                                        {currentPageName || 'Dashboard'}
-                                    </h1>
-                                    <Badge variant="outline" className="text-xs">
-                                        {workspaceMode}
-                                    </Badge>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                                {/* Workspace Controls */}
-                                <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
-                                    <Button
-                                        variant={workspaceMode === 'default' ? 'default' : 'ghost'}
-                                        size="sm"
-                                        onClick={() => setWorkspaceMode('default')}
-                                        className="h-8 px-3"
-                                    >
-                                        <Grid3X3 className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant={workspaceMode === 'compact' ? 'default' : 'ghost'}
-                                        size="sm"
-                                        onClick={() => setWorkspaceMode('compact')}
-                                        className="h-8 px-3"
-                                    >
-                                        <List className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant={workspaceMode === 'fullscreen' ? 'default' : 'ghost'}
-                                        size="sm"
-                                        onClick={() => setWorkspaceMode('fullscreen')}
-                                        className="h-8 px-3"
-                                    >
-                                        <Maximize2 className="w-4 h-4" />
-                                    </Button>
-                                </div>
-
-                                {/* Notifications */}
-                                <Button variant="ghost" size="sm" className="relative">
-                                    <Bell className="w-4 h-4" />
-                                    {notifications.length > 0 && (
-                                        <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                                            {notifications.length}
-                                        </Badge>
-                                    )}
-                                </Button>
-
-                                {/* Help */}
-                                <Button variant="ghost" size="sm">
-                                    <HelpCircle className="w-4 h-4" />
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
+                    <CleanTopBar />
 
                     {/* Main Content Area */}
                     <div className="flex-1 overflow-hidden">

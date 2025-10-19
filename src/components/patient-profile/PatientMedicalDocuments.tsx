@@ -61,7 +61,7 @@ ${'='.repeat(50)}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${doc.document_title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${doc.document_number || Date.now()}.txt`;
+    a.download = `${doc.document_title?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'document'}_${doc.document_number || Date.now()}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

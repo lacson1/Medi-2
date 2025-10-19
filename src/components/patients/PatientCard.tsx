@@ -77,14 +77,14 @@ const PatientCard = memo(function PatientCard({ patient, onEdit, isSelected, onS
 
   return (
     <motion.div
-      initial={{opacity: 0, y: 20}}
-      animate={{opacity: 1, y: 0}}
-      exit={{opacity: 0, y: -20}}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
     >
       <Card className={`border-none shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:scale-[1.02] ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`}>
         <div className={`h-2 bg-gradient-to-r ${patient.status === 'active' ? 'from-green-500 to-emerald-600' :
-            patient.status === 'inactive' ? 'from-gray-400 to-gray-500' :
-              'from-blue-500 to-cyan-600'
+          patient.status === 'inactive' ? 'from-gray-400 to-gray-500' :
+            'from-blue-500 to-cyan-600'
           }`} />
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
@@ -133,7 +133,7 @@ const PatientCard = memo(function PatientCard({ patient, onEdit, isSelected, onS
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Profile
                     </Link>
@@ -144,32 +144,32 @@ const PatientCard = memo(function PatientCard({ patient, onEdit, isSelected, onS
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
                       <CalendarPlus className="w-4 h-4 mr-2" />
                       Schedule Appointment
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
                       <FileHeart className="w-4 h-4 mr-2" />
                       New Encounter
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
                       <Pill className="w-4 h-4 mr-2" />
                       New Prescription
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
                       <Beaker className="w-4 h-4 mr-2" />
                       Order Lab Test
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`}>
+              <Link to={`/patients/${patient.id}`}>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -256,7 +256,7 @@ const PatientCard = memo(function PatientCard({ patient, onEdit, isSelected, onS
           {/* Quick Actions */}
           <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="flex gap-2">
-              <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex-1">
+              <Link to={`/patients/${patient.id}`} className="flex-1">
                 <Button variant="outline" size="sm" className="w-full">
                   <ExternalLink className="w-3 h-3 mr-1" />
                   View Profile

@@ -12,7 +12,7 @@ describe('Label Component', () => {
 
         const label = screen.getByText('Label text');
         expect(label).toBeInTheDocument();
-        expect(label).toHaveClass('text-sm', 'font-medium', 'leading-none');
+        expect(label).toHaveClass('text-label-large', 'leading-none', 'peer-disabled:cursor-not-allowed', 'peer-disabled:opacity-70');
     });
 
     it('renders with custom className', () => {
@@ -84,7 +84,7 @@ describe('Label Component', () => {
         const texts = ['Short', 'This is a longer label text', 'Label with numbers 123'];
 
         texts.forEach(text => {
-            const { unmount } = render(<Label>{{text}}</Label>);
+            const { unmount } = render(<Label>{text}</Label>);
 
             const label = screen.getByText(text);
             expect(label).toBeInTheDocument();

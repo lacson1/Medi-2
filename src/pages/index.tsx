@@ -6,24 +6,20 @@ import Loading from '@/components/Loading';
 // Lazy load Layout component
 const Layout = lazy(() => import('./Layout'));
 
-// Lazy load all page components for better performance
+// Lazy load core page components
 const Dashboard = lazy(() => import('./Dashboard'));
-const IconEnhancedDashboard = lazy(() => import('./IconEnhancedDashboard'));
+const PatientWorkspace = lazy(() => import('./PatientWorkspace'));
+const StreamlinedPatientWorkspace = lazy(() => import('@/components/patients/StreamlinedPatientWorkspace'));
 const Patients = lazy(() => import('./Patients'));
-const PatientProfile = lazy(() => import('./PatientProfile'));
-const EnhancedPatientProfile = lazy(() => import('./EnhancedPatientProfile'));
-const PatientDashboard = lazy(() => import('./PatientDashboard'));
 const PatientPortal = lazy(() => import('./PatientPortal'));
 const Appointments = lazy(() => import('./Appointments'));
 const Telemedicine = lazy(() => import('./Telemedicine'));
 const LabOrders = lazy(() => import('./LabOrders'));
 const LaboratoryManagement = lazy(() => import('./LaboratoryManagement'));
-const LabManagement = lazy(() => import('./LabManagement'));
 const PrescriptionManagement = lazy(() => import('./PrescriptionManagement'));
 const PharmacyManagement = lazy(() => import('./PharmacyManagement'));
 const Referrals = lazy(() => import('./Referrals'));
 const ProceduralReports = lazy(() => import('./ProceduralReports'));
-const TestProceduralReports = lazy(() => import('./TestProceduralReports'));
 const Billing = lazy(() => import('./Billing'));
 const FinancialAnalytics = lazy(() => import('./FinancialAnalytics'));
 const ConsultationTemplates = lazy(() => import('./ConsultationTemplates'));
@@ -34,20 +30,16 @@ const OrganizationSettings = lazy(() => import('./OrganizationSettings'));
 const Settings = lazy(() => import('./Settings'));
 const Profile = lazy(() => import('./Profile'));
 const Login = lazy(() => import('./Login'));
-const SystemTester = lazy(() => import('./SystemTester'));
-const TestCRUD = lazy(() => import('./TestCRUD'));
 const HelpSupport = lazy(() => import('./HelpSupport'));
 const StaffMessaging = lazy(() => import('./StaffMessaging'));
-const SuperAdminDashboard = lazy(() => import('./SuperAdminDashboard'));
-const WorkspaceDashboard = lazy(() => import('./WorkspaceDashboard'));
-const EnhancedLayout = lazy(() => import('./EnhancedLayout'));
-const EnhancedPatientWorkspace = lazy(() => import('./EnhancedPatientWorkspace'));
-const IconEnhancedPatientWorkspace = lazy(() => import('./IconEnhancedPatientWorkspace'));
 const ClinicalPerformance = lazy(() => import('./ClinicalPerformance'));
 const ComplianceCenter = lazy(() => import('./ComplianceCenter'));
-const MedicationFormDemo = lazy(() => import('./MedicationFormDemo'));
+const ConsultationManagement = lazy(() => import('./ConsultationManagement'));
+const SystemTester = lazy(() => import('./SystemTester'));
+const AutocompleteDemoPage = lazy(() => import('./AutocompleteDemoPage'));
+const DialogAlertTestPage = lazy(() => import('./DialogAlertTestPage'));
 
-// Main Pages Component with Routing
+// Main Pages Component with Simplified Routing
 export default function Pages() {
     return (
         <Router>
@@ -74,58 +66,28 @@ export default function Pages() {
                         </Suspense>
                     </ProtectedRoute>
                 }>
-                    {/* Dashboard Routes */}
+                    {/* Dashboard - Unified with view modes */}
                     <Route index element={<Navigate to="/dashboard" replace />} />
                     <Route path="dashboard" element={
                         <Suspense fallback={<Loading />}>
                             <Dashboard />
                         </Suspense>
                     } />
-                    <Route path="icon-enhanced-dashboard" element={
-                        <Suspense fallback={<Loading />}>
-                            <IconEnhancedDashboard />
-                        </Suspense>
-                    } />
-                    <Route path="workspace-dashboard" element={
-                        <Suspense fallback={<Loading />}>
-                            <WorkspaceDashboard />
-                        </Suspense>
-                    } />
-                    <Route path="super-admin-dashboard" element={
-                        <Suspense fallback={<Loading />}>
-                            <SuperAdminDashboard />
-                        </Suspense>
-                    } />
 
-                    {/* Patient Management Routes */}
+                    {/* Patient Management - Unified with view modes */}
                     <Route path="patients" element={
                         <Suspense fallback={<Loading />}>
                             <Patients />
                         </Suspense>
                     } />
-                    <Route path="patient-profile/:id" element={
+                    <Route path="patients/:id" element={
                         <Suspense fallback={<Loading />}>
-                            <PatientProfile />
+                            <StreamlinedPatientWorkspace />
                         </Suspense>
                     } />
-                    <Route path="enhanced-patient-profile/:id" element={
+                    <Route path="patients/:id/legacy" element={
                         <Suspense fallback={<Loading />}>
-                            <EnhancedPatientProfile />
-                        </Suspense>
-                    } />
-                    <Route path="patient-dashboard/:id" element={
-                        <Suspense fallback={<Loading />}>
-                            <PatientDashboard />
-                        </Suspense>
-                    } />
-                    <Route path="enhanced-patient-workspace/:id" element={
-                        <Suspense fallback={<Loading />}>
-                            <EnhancedPatientWorkspace />
-                        </Suspense>
-                    } />
-                    <Route path="icon-enhanced-patient-workspace/:id" element={
-                        <Suspense fallback={<Loading />}>
-                            <IconEnhancedPatientWorkspace />
+                            <PatientWorkspace />
                         </Suspense>
                     } />
 
@@ -150,11 +112,6 @@ export default function Pages() {
                             <LaboratoryManagement />
                         </Suspense>
                     } />
-                    <Route path="lab-management" element={
-                        <Suspense fallback={<Loading />}>
-                            <LabManagement />
-                        </Suspense>
-                    } />
                     <Route path="prescription-management" element={
                         <Suspense fallback={<Loading />}>
                             <PrescriptionManagement />
@@ -173,11 +130,6 @@ export default function Pages() {
                     <Route path="procedural-reports" element={
                         <Suspense fallback={<Loading />}>
                             <ProceduralReports />
-                        </Suspense>
-                    } />
-                    <Route path="test-procedural-reports" element={
-                        <Suspense fallback={<Loading />}>
-                            <TestProceduralReports />
                         </Suspense>
                     } />
 
@@ -256,27 +208,25 @@ export default function Pages() {
                         </Suspense>
                     } />
 
-                    {/* Development & Testing */}
+                    {/* System Testing */}
                     <Route path="system-tester" element={
                         <Suspense fallback={<Loading />}>
                             <SystemTester />
                         </Suspense>
                     } />
-                    <Route path="test-crud" element={
+                    <Route path="consultation-management" element={
                         <Suspense fallback={<Loading />}>
-                            <TestCRUD />
+                            <ConsultationManagement />
                         </Suspense>
                     } />
-                    <Route path="medication-form-demo" element={
+                    <Route path="autocomplete-demo" element={
                         <Suspense fallback={<Loading />}>
-                            <MedicationFormDemo />
+                            <AutocompleteDemoPage />
                         </Suspense>
                     } />
-
-                    {/* Enhanced Layout Routes */}
-                    <Route path="enhanced-layout" element={
+                    <Route path="dialog-alert-test" element={
                         <Suspense fallback={<Loading />}>
-                            <EnhancedLayout />
+                            <DialogAlertTestPage />
                         </Suspense>
                     } />
 

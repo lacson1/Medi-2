@@ -19,7 +19,7 @@ describe('Card Component', () => {
 
         const card = screen.getByText('Card content');
         expect(card).toBeInTheDocument();
-        expect(card).toHaveClass('rounded-xl', 'border', 'bg-card');
+        expect(card).toHaveClass('rounded-xl', 'border', 'border-outline', 'bg-surface', 'text-surface-foreground', 'shadow-sm');
     });
 
     it('renders Card with custom className', () => {
@@ -77,8 +77,8 @@ describe('Card Component', () => {
         );
 
         const title = screen.getByText('Title');
-        expect(title).toHaveClass('font-semibold', 'leading-none', 'tracking-tight');
-        expect(title.tagName).toBe('H3');
+        expect(title).toHaveClass('card-title', 'leading-none', 'tracking-tight');
+        expect(title.tagName).toBe('DIV');
     });
 
     it('renders CardDescription with proper styling', () => {
@@ -89,7 +89,7 @@ describe('Card Component', () => {
         );
 
         const description = screen.getByText('Description');
-        expect(description).toHaveClass('text-sm', 'text-muted-foreground');
+        expect(description).toHaveClass('card-subtitle');
     });
 
     it('renders CardContent with proper styling', () => {

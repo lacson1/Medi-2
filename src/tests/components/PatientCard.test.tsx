@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { AuthProvider } from "@/hooks/useAuth";
 import PatientCard from '@/components/patients/PatientCard';
 import type { ReactNode } from 'react';
 

@@ -4,27 +4,31 @@ import { Badge } from "@/components/ui/badge";
 import PropTypes from "prop-types";
 
 export default function ClinicalAlerts({ patient, newPrescription }: any) {
+  if (!patient) {
+    return null;
+  }
+
   const alerts = [];
 
   // Check drug allergies
-  if (newPrescription && patient.allergies) {
-    const allergyMatch = patient.allergies.some(allergy => 
+  if (newPrescription && patient?.allergies) {
+    const allergyMatch = patient?.allergies?.some(allergy =>
       newPrescription.medication_name?.toLowerCase().includes(allergy.toLowerCase())
     );
     if (allergyMatch) {
       alerts.push({
         type: "critical",
         title: "Allergy Alert",
-        message: `Patient has documented allergy to ${patient.allergies.join(', ')}`,
+        message: `Patient has documented allergy to ${patient?.allergies?.join(', ')}`,
         icon: AlertTriangle
       });
     }
   }
 
   // Check abnormal vitals
-  if (patient.latest_vitals) {
+  if (patient?.latest_vitals) {
     const { blood_pressure, oxygen_saturation } = patient.latest_vitals;
-    
+
     if (blood_pressure) {
       const [systolic] = blood_pressure.split('/').map(Number);
       if (systolic > 140) {
@@ -36,7 +40,7 @@ export default function ClinicalAlerts({ patient, newPrescription }: any) {
         });
       }
     }
-    
+
     if (oxygen_saturation && oxygen_saturation < 92) {
       alerts.push({
         type: "critical",
@@ -48,7 +52,7 @@ export default function ClinicalAlerts({ patient, newPrescription }: any) {
   }
 
   // Check age-based alerts
-  const age = patient.age;
+  const age = patient?.age;
   if (age && age > 65 && newPrescription) {
     alerts.push({
       type: "info",
@@ -58,7 +62,7 @@ export default function ClinicalAlerts({ patient, newPrescription }: any) {
     });
   }
 
-  if (alerts.length === 0) return null;
+  if (!alerts || alerts.length === 0) return null;
 
   return (
     <div className="space-y-2 mb-4">
@@ -69,7 +73,7 @@ export default function ClinicalAlerts({ patient, newPrescription }: any) {
           warning: "border-orange-200 bg-orange-50 text-orange-900",
           info: "border-blue-200 bg-blue-50 text-blue-900"
         };
-        
+
         return (
           <Alert key={idx} className={`${alertStyles[alert.type]} border-l-4`}>
             <Icon className="h-4 w-4" />

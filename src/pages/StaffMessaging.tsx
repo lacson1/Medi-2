@@ -39,7 +39,7 @@ import {
   VideoOff,
   PhoneOff
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { mockApiClient } from "@/api/mockApiClient";
 
 // Mock WebRTC implementation (replace with real WebRTC library)

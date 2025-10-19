@@ -66,8 +66,8 @@ export default defineConfig({
         // }),
     ],
     server: {
-        port: 3000, // Use a specific port to avoid conflicts
-        strictPort: true, // Fail if port is already in use
+        port: 5173, // Vite's default development port
+        strictPort: false, // Allow fallback to next available port
         host: true, // Allow external connections
         allowedHosts: true,
         fs: {

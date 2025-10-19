@@ -392,7 +392,7 @@ export const useAccessibleForm = (initialValues: FormValues = {}) => {
         Object.keys(validators).forEach(field => {
             const validator = validators[field];
             if (validator) {
-                const error = validator(values[field] as string | number | boolean);
+                const error = validator(values[field]);
                 if (error) {
                     newErrors[field] = error;
                     isValid = false;

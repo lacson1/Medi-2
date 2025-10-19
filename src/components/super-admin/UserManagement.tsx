@@ -49,7 +49,7 @@ import {
   UserMinus,
   Key
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { SYSTEM_ROLES } from '@/utils/enhancedRoleManagement';
 import { mockApiClient } from "@/api/mockApiClient";
 

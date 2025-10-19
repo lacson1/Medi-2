@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, Info, Printer, Search } from "lucide-react";
 import { medications, commonIndications, commonDosages, commonFrequencies } from "@/data/medications";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 interface PrescriptionFormData {
   medication_name: string;

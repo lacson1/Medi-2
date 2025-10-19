@@ -6,6 +6,25 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
     theme: {
         extend: {
+            // Mobile-first breakpoints
+            screens: {
+                'xs': '475px',
+                'sm': '640px',
+                'md': '768px',
+                'lg': '1024px',
+                'xl': '1280px',
+                '2xl': '1536px',
+                // Mobile-specific breakpoints
+                'mobile': { 'max': '767px' },
+                'tablet': { 'min': '768px', 'max': '1023px' },
+                'desktop': { 'min': '1024px' },
+                // Orientation breakpoints
+                'portrait': { 'raw': '(orientation: portrait)' },
+                'landscape': { 'raw': '(orientation: landscape)' },
+                // Touch device detection
+                'touch': { 'raw': '(hover: none) and (pointer: coarse)' },
+                'no-touch': { 'raw': '(hover: hover) and (pointer: fine)' },
+            },
             fontFamily: {
                 'sans': ['Roboto', 'Google Sans', 'system-ui', 'sans-serif'],
                 'roboto': ['Roboto', 'sans-serif'],
@@ -32,6 +51,29 @@ module.exports = {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
                 sm: 'calc(var(--radius) - 4px)'
+            },
+            spacing: {
+                // Mobile-specific spacing
+                'safe-top': 'env(safe-area-inset-top, 0px)',
+                'safe-bottom': 'env(safe-area-inset-bottom, 0px)',
+                'safe-left': 'env(safe-area-inset-left, 0px)',
+                'safe-right': 'env(safe-area-inset-right, 0px)',
+                // Touch-friendly spacing
+                'touch': '44px',
+                'touch-lg': '48px',
+                'touch-xl': '56px',
+            },
+            minHeight: {
+                'touch': '44px',
+                'touch-lg': '48px',
+                'touch-xl': '56px',
+                'screen-mobile': '100vh',
+                'screen-mobile-dynamic': '100dvh',
+            },
+            minWidth: {
+                'touch': '44px',
+                'touch-lg': '48px',
+                'touch-xl': '56px',
             },
             colors: {
                 background: 'hsl(var(--background))',

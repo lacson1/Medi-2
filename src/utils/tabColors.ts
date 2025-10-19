@@ -186,7 +186,7 @@ export const getTabColorScheme = (tabValue: string, customScheme: TabColorScheme
     const lowerTabValue = tabValue.toLowerCase();
     for (const [key, scheme] of Object.entries(TAB_TYPE_MAPPINGS)) {
         if (lowerTabValue.includes(key)) {
-            return TAB_COLOR_SCHEMES[scheme as TabColorScheme];
+            return TAB_COLOR_SCHEMES[scheme];
         }
     }
 

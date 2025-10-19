@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function PatientListItem({ patient, onEdit, isSelected, onSelect }: any) {
-  const age = patient.date_of_birth 
+  const age = patient.date_of_birth
     ? differenceInYears(new Date(), parseISO(patient.date_of_birth))
     : null;
 
@@ -48,14 +48,14 @@ export default function PatientListItem({ patient, onEdit, isSelected, onSelect 
 
   return (
     <motion.div
-      initial={{opacity: 0, y: 20}}
-      animate={{opacity: 1, y: 0}}
-      exit={{opacity: 0, y: -20}}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
     >
-      <Card className={`border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:scale-[1.01] ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`}>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4 flex-1 min-w-0">
+      <Card className={`md-card group hover:scale-[1.01] transition-all duration-300 ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`}>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between gap-6">
+            <div className="flex items-center gap-6 flex-1 min-w-0">
               {onSelect && (
                 <Checkbox
                   checked={isSelected}
@@ -64,53 +64,53 @@ export default function PatientListItem({ patient, onEdit, isSelected, onSelect 
               )}
               {/* Avatar with allergy indicator */}
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-bold text-lg">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-bold text-xl">
                   {patient.first_name?.charAt(0)}{patient.last_name?.charAt(0)}
                 </div>
                 {patient.allergies && patient.allergies.length > 0 && (
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-                    <AlertTriangle className="w-2.5 h-2.5 text-white" />
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                    <AlertTriangle className="w-3 h-3 text-white" />
                   </div>
                 )}
               </div>
 
               {/* Patient Info Grid */}
-              <div className="flex-1 min-w-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-2 items-center">
+              <div className="flex-1 min-w-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3 items-center">
                 {/* Name and Age */}
                 <div className="truncate">
-                  <h3 className="font-bold text-gray-900 truncate">
+                  <h3 className="md-title-large text-gray-900 truncate">
                     {patient.first_name} {patient.last_name}
                   </h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-sm text-gray-500">
+                  <div className="flex items-center gap-3 mt-2">
+                    <p className="md-body-medium text-gray-500">
                       {age ? `${age} yrs` : "N/A"} • {patient.gender || "N/A"}
                     </p>
-                    <Badge variant="outline" className={`text-xs ${getAgeGroupColor(age)}`}>
+                    <Badge variant="outline" className={`md-label-large ${getAgeGroupColor(age)}`}>
                       {getAgeGroup(age)}
                     </Badge>
                   </div>
                 </div>
 
                 {/* Contact Info */}
-                <div className="flex items-center gap-2 text-sm text-gray-600 truncate">
-                  <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <div className="flex items-center gap-3 md-body-large text-gray-600 truncate">
+                  <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
                   <span className="truncate">{patient.email || "No email"}</span>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600 truncate">
-                  <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <div className="hidden sm:flex items-center gap-3 md-body-large text-gray-600 truncate">
+                  <Phone className="w-5 h-5 text-gray-400 flex-shrink-0" />
                   <span className="truncate">{patient.phone || "No phone"}</span>
                 </div>
 
                 {/* Status and Medical Info */}
-                <div className="hidden lg:flex items-center gap-2">
-                  <Badge variant="outline" className={`text-xs ${getStatusColor(patient.status)}`}>
-                    <Activity className="w-3 h-3 mr-1" />
+                <div className="hidden lg:flex items-center gap-3">
+                  <Badge variant="outline" className={`md-label-large ${getStatusColor(patient.status)}`}>
+                    <Activity className="w-4 h-4 mr-2" />
                     {patient.status || 'Active'}
                   </Badge>
                   {patient.blood_type && patient.blood_type !== 'unknown' && (
-                    <Badge variant="outline" className="text-xs border-red-200 text-red-700">
-                      <Heart className="w-3 h-3 mr-1" />
+                    <Badge variant="outline" className="md-label-large border-red-200 text-red-700">
+                      <Heart className="w-4 h-4 mr-2" />
                       {patient.blood_type}
                     </Badge>
                   )}
@@ -119,63 +119,63 @@ export default function PatientListItem({ patient, onEdit, isSelected, onSelect 
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-1 flex-shrink-0">
+            <div className="flex gap-2 flex-shrink-0">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-50"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-50 h-12 w-12"
                   >
-                    <MoreVertical className="w-4 h-4" />
+                    <MoreVertical className="w-5 h-5" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
-                      <ExternalLink className="w-4 h-4 mr-2" />
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
+                      <ExternalLink className="w-4 h-4 mr-3" />
                       View Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onEdit(patient)} className="flex items-center cursor-pointer">
-                    <Edit className="w-4 h-4 mr-2" />
+                    <Edit className="w-4 h-4 mr-3" />
                     Edit Patient
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
-                      <CalendarPlus className="w-4 h-4 mr-2" />
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
+                      <CalendarPlus className="w-4 h-4 mr-3" />
                       Schedule Appointment
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
-                      <FileHeart className="w-4 h-4 mr-2" />
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
+                      <FileHeart className="w-4 h-4 mr-3" />
                       New Encounter
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
-                      <Pill className="w-4 h-4 mr-2" />
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
+                      <Pill className="w-4 h-4 mr-3" />
                       New Prescription
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`} className="flex items-center cursor-pointer">
-                      <Beaker className="w-4 h-4 mr-2" />
+                    <Link to={`/patients/${patient.id}`} className="flex items-center cursor-pointer">
+                      <Beaker className="w-4 h-4 mr-3" />
                       Order Lab Test
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              
-              <Link to={`${createPageUrl("PatientProfile")}?id=${patient.id}`}>
+
+              <Link to={`/patients/${patient.id}`}>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hover:bg-blue-50"
+                  className="hover:bg-blue-50 h-12 w-12"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-5 h-5" />
                 </Button>
               </Link>
             </div>

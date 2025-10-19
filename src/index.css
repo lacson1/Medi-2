@@ -1,6 +1,25 @@
+/* Import Google Material Design styles */
+
+@import './styles/google-material.css';
+@import './styles/accessibility.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom utilities */
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -203,6 +222,14 @@ button:focus-visible {
     * {
         @apply border-border outline-ring/50;
     }
+    html {
+        /* Mobile-first viewport optimization */
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        /* Prevent horizontal scroll on mobile */
+        overflow-x: hidden;
+    }
     body {
         @apply bg-background text-foreground;
         font-family: 'Roboto', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -211,6 +238,56 @@ button:focus-visible {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+        /* Mobile-first optimizations */
+        min-height: 100vh;
+        min-height: 100dvh;
+        /* Dynamic viewport height for mobile browsers */
+        margin: 0;
+        padding: 0;
+        /* Prevent zoom on input focus (iOS) */
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        /* Smooth scrolling for mobile */
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    /* Mobile-first container system */
+    .container {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    /* Mobile breakpoints */
+    @media (min-width: 640px) {
+        .container {
+            max-width: 640px;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+    }
+    @media (min-width: 768px) {
+        .container {
+            max-width: 768px;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    }
+    @media (min-width: 1024px) {
+        .container {
+            max-width: 1024px;
+        }
+    }
+    @media (min-width: 1280px) {
+        .container {
+            max-width: 1280px;
+        }
+    }
+    @media (min-width: 1536px) {
+        .container {
+            max-width: 1536px;
+        }
     }
 }
 
@@ -535,6 +612,246 @@ button:focus-visible {
     .focus-calm-ring:focus {
         box-shadow: 0 0 0 3px hsl(210 100% 50% / 0.2);
     }
+}
+
+
+/* Mobile-First Utility Classes */
+
+
+/* Touch-friendly sizing */
+
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.touch-target-lg {
+    min-height: 48px;
+    min-width: 48px;
+}
+
+.touch-target-xl {
+    min-height: 56px;
+    min-width: 56px;
+}
+
+
+/* Mobile spacing utilities */
+
+.mobile-padding {
+    padding: 1rem;
+}
+
+.mobile-padding-sm {
+    padding: 0.75rem;
+}
+
+.mobile-padding-lg {
+    padding: 1.5rem;
+}
+
+.mobile-margin {
+    margin: 1rem;
+}
+
+.mobile-margin-sm {
+    margin: 0.75rem;
+}
+
+.mobile-margin-lg {
+    margin: 1.5rem;
+}
+
+
+/* Mobile-specific layouts */
+
+.mobile-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mobile-stack-sm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mobile-stack-lg {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.mobile-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+
+/* Mobile navigation */
+
+.mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: hsl(var(--background));
+    border-top: 1px solid hsl(var(--border));
+    padding: env(safe-area-inset-bottom, 0) 0 0 0;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    min-height: 44px;
+    text-decoration: none;
+    color: hsl(var(--muted-foreground));
+    transition: color 0.2s ease;
+}
+
+.mobile-nav-item.active {
+    color: hsl(var(--primary));
+}
+
+.mobile-nav-item:hover {
+    color: hsl(var(--foreground));
+}
+
+
+/* Mobile cards */
+
+.mobile-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin: 0.5rem;
+    box-shadow: 0 1px 3px 0 hsl(var(--foreground) / 0.1);
+}
+
+.mobile-card-compact {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin: 0.25rem;
+    box-shadow: 0 1px 2px 0 hsl(var(--foreground) / 0.05);
+}
+
+
+/* Mobile forms */
+
+.mobile-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-size: 16px;
+    /* Prevent zoom on iOS */
+    min-height: 44px;
+}
+
+.mobile-input:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-color: hsl(var(--ring));
+}
+
+.mobile-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-weight: 500;
+    min-height: 44px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-button:hover {
+    background: hsl(var(--primary) / 0.9);
+}
+
+.mobile-button:active {
+    background: hsl(var(--primary) / 0.8);
+}
+
+.mobile-button-secondary {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+}
+
+.mobile-button-secondary:hover {
+    background: hsl(var(--secondary) / 0.9);
+}
+
+
+/* Mobile-specific responsive utilities */
+
+@media (max-width: 767px) {
+    .mobile-only {
+        display: block;
+    }
+    .desktop-only {
+        display: none;
+    }
+    .mobile-hidden {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .mobile-only {
+        display: none;
+    }
+    .desktop-only {
+        display: block;
+    }
+    .mobile-hidden {
+        display: block;
+    }
+}
+
+
+/* Safe area handling for mobile devices */
+
+.safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-area-left {
+    padding-left: env(safe-area-inset-left, 0);
+}
+
+.safe-area-right {
+    padding-right: env(safe-area-inset-right, 0);
+}
+
+.safe-area-all {
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
 }
 
 

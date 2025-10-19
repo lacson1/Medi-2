@@ -54,20 +54,125 @@ export default defineConfig({
             name: 'webkit',
             use: {...devices['Desktop Safari'] },
         },
-        /* Test against mobile viewports. */
+        /* Mobile-First Testing Projects */
         {
             name: 'Mobile Chrome',
-            use: {...devices['Pixel 5'] },
+            use: {
+                ...devices['Pixel 5'],
+                // Mobile-specific settings
+                hasTouch: true,
+                isMobile: true,
+                deviceScaleFactor: 2.75,
+            },
         },
         {
             name: 'Mobile Safari',
-            use: {...devices['iPhone 12'] },
+            use: {
+                ...devices['iPhone 12'],
+                // Mobile-specific settings
+                hasTouch: true,
+                isMobile: true,
+                deviceScaleFactor: 3,
+            },
+        },
+        {
+            name: 'Mobile Safari Pro',
+            use: {
+                ...devices['iPhone 13 Pro'],
+                hasTouch: true,
+                isMobile: true,
+                deviceScaleFactor: 3,
+            },
+        },
+        {
+            name: 'Mobile Android Large',
+            use: {
+                ...devices['Galaxy S III'],
+                hasTouch: true,
+                isMobile: true,
+                deviceScaleFactor: 2,
+            },
+        },
+        {
+            name: 'Mobile Android Small',
+            use: {
+                ...devices['Galaxy Note II'],
+                hasTouch: true,
+                isMobile: true,
+                deviceScaleFactor: 1.5,
+            },
+        },
+        {
+            name: 'Mobile Landscape',
+            use: {
+                ...devices['iPhone 12 landscape'],
+                hasTouch: true,
+                isMobile: true,
+                deviceScaleFactor: 3,
+            },
         },
         /* Test against tablet viewports. */
         {
             name: 'Tablet Chrome',
             use: {...devices['iPad Pro'] },
         },
+
+        /* PWA Testing Projects */
+        {
+            name: 'PWA Chrome',
+            use: {
+                ...devices['Desktop Chrome'],
+                // PWA-specific settings
+                permissions: ['notifications'],
+                geolocation: { latitude: 40.7128, longitude: -74.0060 },
+            },
+        },
+        {
+            name: 'PWA Mobile Chrome',
+            use: {
+                ...devices['Pixel 5'],
+                hasTouch: true,
+                isMobile: true,
+                permissions: ['notifications'],
+                geolocation: { latitude: 40.7128, longitude: -74.0060 },
+            },
+        },
+
+        /* Accessibility Testing */
+        {
+            name: 'Accessibility Chrome',
+            use: {
+                ...devices['Desktop Chrome'],
+                // Accessibility testing settings
+                reducedMotion: 'reduce',
+                forcedColors: 'active',
+            },
+        },
+        {
+            name: 'Accessibility Mobile',
+            use: {
+                ...devices['iPhone 12'],
+                hasTouch: true,
+                isMobile: true,
+                reducedMotion: 'reduce',
+                forcedColors: 'active',
+            },
+        },
+
+        /* Performance Testing */
+        {
+            name: 'Performance Mobile',
+            use: {
+                ...devices['Pixel 5'],
+                hasTouch: true,
+                isMobile: true,
+                // Slow down for performance testing
+                launchOptions: {
+                    slowMo: 100,
+                },
+            },
+        },
+
         /* Test against branded browsers. */
         {
             name: 'Microsoft Edge',

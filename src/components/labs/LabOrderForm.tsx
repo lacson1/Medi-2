@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AutoComplete from "@/components/ui/auto-complete";
 import { mockApiClient } from "@/api/mockApiClient";
+import { LabTestField, ConditionField } from "@/components/forms/EnhancedFormFields";
 import {
   Loader2,
   Beaker,

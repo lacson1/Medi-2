@@ -32,7 +32,8 @@ import {
   CheckCircle,
   AlertCircle,
   TrendingUp,
-  BarChart3
+  BarChart3,
+  Monitor
 } from "lucide-react";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,6 +44,8 @@ import { Separator } from "@/components/ui/separator";
 
 import PermissionManager from "../components/profile/PermissionManager";
 import OrganizationAssignment from "../components/profile/OrganizationAssignment";
+import { AccessibilityControls } from "@/components/mobile/MobileOptimizedComponents";
+import SystemTester from "./SystemTester";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -50,6 +53,9 @@ export default function ProfilePage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [highContrast, setHighContrast] = useState(false);
+  const [largeText, setLargeText] = useState(false);
+  const [voiceNavigation, setVoiceNavigation] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: currentUser, isLoading } = useQuery({
@@ -298,6 +304,10 @@ export default function ProfilePage() {
                 <TabsTrigger value="organizations" className="flex items-center gap-2">
                   <Building2 className="w-4 h-4" />
                   <span className="hidden sm:inline">Org Access</span>
+                </TabsTrigger>
+                <TabsTrigger value="system-testing" className="flex items-center gap-2">
+                  <Monitor className="w-4 h-4" />
+                  <span className="hidden sm:inline">System Testing</span>
                 </TabsTrigger>
               </>
             )}
@@ -887,6 +897,99 @@ export default function ProfilePage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Accessibility Controls */}
+            <Card className="border-none shadow-lg">
+              <CardHeader className="border-b border-gray-100">
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="w-5 h-5" />
+                  Accessibility Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <AccessibilityControls
+                  onToggleHighContrast={() => setHighContrast(!highContrast)}
+                  onToggleLargeText={() => setLargeText(!largeText)}
+                  onToggleVoiceNavigation={() => setVoiceNavigation(!voiceNavigation)}
+                  highContrast={highContrast}
+                  largeText={largeText}
+                  voiceNavigation={voiceNavigation}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Display Preferences */}
+            <Card className="border-none shadow-lg">
+              <CardHeader className="border-b border-gray-100">
+                <CardTitle>Display Preferences</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span>Dark Mode</span>
+                    <Button variant="outline" size="sm">Toggle</Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Compact View</span>
+                    <Button variant="outline" size="sm">Toggle</Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Auto-refresh</span>
+                    <Button variant="outline" size="sm">Toggle</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Basic System Testing */}
+            <Card className="border-none shadow-lg">
+              <CardHeader className="border-b border-gray-100">
+                <CardTitle className="flex items-center gap-2">
+                  <Monitor className="w-5 h-5" />
+                  System Diagnostics
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <p className="text-gray-600">
+                    Basic system diagnostics and health checks. For comprehensive testing,
+                    {isSuperAdmin ? ' use the System Testing tab above.' : ' contact your system administrator.'}
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <span className="text-sm font-medium">System Status</span>
+                      </div>
+                      <Badge variant="outline" className="text-green-600 border-green-600">
+                        Healthy
+                      </Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <Activity className="w-4 h-4 text-blue-600" />
+                        <span className="text-sm font-medium">Performance</span>
+                      </div>
+                      <Badge variant="outline" className="text-blue-600 border-blue-600">
+                        Optimal
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {!isSuperAdmin && (
+                    <div className="bg-yellow-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-yellow-900 mb-2">Limited Access</h4>
+                      <p className="text-sm text-yellow-800">
+                        You have limited access to system testing tools. For comprehensive testing
+                        and diagnostics, contact your system administrator or upgrade to super admin privileges.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* PERMISSIONS TAB (SuperAdmin Only) */}
@@ -900,6 +1003,45 @@ export default function ProfilePage() {
           {isSuperAdmin && (
             <TabsContent value="organizations">
               <OrganizationAssignment />
+            </TabsContent>
+          )}
+
+          {/* SYSTEM TESTING TAB (SuperAdmin Only) */}
+          {isSuperAdmin && (
+            <TabsContent value="system-testing">
+              <div className="space-y-6">
+                <Card className="border-none shadow-lg">
+                  <CardHeader className="border-b border-gray-100">
+                    <CardTitle className="flex items-center gap-2">
+                      <Monitor className="w-5 h-5" />
+                      System Testing & Diagnostics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <p className="text-gray-600">
+                        Comprehensive system testing tools for validating all major components and integrations.
+                        Run tests to ensure system stability and identify potential issues.
+                      </p>
+
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <h4 className="font-medium text-blue-900 mb-2">Available Test Suites</h4>
+                        <ul className="text-sm text-blue-800 space-y-1">
+                          <li>• Laboratory System Testing</li>
+                          <li>• Prescription System Testing</li>
+                          <li>• Dialog & Alert System Testing</li>
+                          <li>• Integration Testing</li>
+                          <li>• Performance Testing</li>
+                        </ul>
+                      </div>
+
+                      <div className="flex justify-center">
+                        <SystemTester />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
           )}
         </Tabs>

@@ -46,7 +46,7 @@ import {
   commonDosages,
   commonFrequencies
 } from '@/data/medications';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 
 // Validation schema
 const medicationSchema = z.object({

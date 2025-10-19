@@ -25,7 +25,7 @@ import {
   Network,
   FileText
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { mockApiClient } from "@/api/mockApiClient";
 
 export default function SecuritySettings() {
@@ -73,11 +73,13 @@ export default function SecuritySettings() {
     // API Security
     apiSecurity: {
       rateLimitEnabled: true,
-      rateLimitRequests: 100, // per minute
-      apiKeyExpiration: 365, // days
-      requireHttps: true,
+      rateLimitRequests: parseInt(process.env.VITE_RATE_LIMIT_REQUESTS || '100'), // per minute
+      apiKeyExpiration: parseInt(process.env.VITE_API_KEY_EXPIRATION || '365'), // days
+      requireHttps: process.env.NODE_ENV === 'production',
       corsEnabled: true,
-      allowedOrigins: ['https://mediflow.com']
+      allowedOrigins: process.env.VITE_ALLOWED_ORIGINS ?
+        process.env.VITE_ALLOWED_ORIGINS.split(',') :
+        ['https://yourdomain.com', 'https://www.yourdomain.com']
     },
 
     // Data Encryption

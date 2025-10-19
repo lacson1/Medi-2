@@ -47,7 +47,7 @@ describe('Badge Component', () => {
         const texts = ['Short', 'Medium length text', 'This is a longer badge text content'];
 
         texts.forEach(text => {
-            const { unmount } = render(<Badge>{{ text }}</Badge>);
+            const { unmount } = render(<Badge>{text}</Badge>);
 
             const badge = screen.getByText(text);
             expect(badge).toBeInTheDocument();
@@ -141,8 +141,8 @@ describe('Badge Component', () => {
         );
 
         const badge = screen.getByText('Styled badge');
-        expect(badge).toHaveStyle('background-color: red');
-        expect(badge).toHaveStyle('color: white');
+        expect(badge).toHaveStyle('background-color: rgb(255, 0, 0)');
+        expect(badge).toHaveStyle('color: rgb(255, 255, 255)');
         expect(badge).toHaveClass('custom-style');
     });
 

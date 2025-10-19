@@ -12,6 +12,7 @@ import { X, Calendar, Clock, User, AlertCircle, CheckCircle } from "lucide-react
 import { addDays, isAfter, isBefore, parseISO } from "date-fns";
 import { toast } from "sonner";
 import PropTypes from "prop-types";
+import { SymptomField } from "@/components/forms/EnhancedFormFields";
 
 interface AppointmentFormProps {
   appointment?: any;
@@ -324,12 +325,13 @@ export default function AppointmentForm({ appointment, patients, onSubmit, onCan
                 </div>
 
                 <div className="space-y-2">
-                  <Label>{"Reason for Visit *"}</Label>
-                  <Input
-                    required
+                  <SymptomField
+                    name="reason"
+                    label="Reason for Visit *"
+                    placeholder="Brief description of the visit purpose (e.g., Chest Pain, Headache)"
                     value={formData.reason}
-                    onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                    placeholder="Brief description of the visit purpose"
+                    onChange={(value) => setFormData({ ...formData, reason: value })}
+                    required
                     className={errors.reason ? "border-red-500" : ""}
                   />
                   {errors.reason && (

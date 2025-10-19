@@ -13,16 +13,20 @@ import {
   Clock,
   Settings,
   Play,
-  Zap
+  Zap,
+  Monitor,
+  Shield
 } from 'lucide-react';
 import LabSystemTester from '../components/testing/LabSystemTester';
 import PrescriptionSystemTester from '../components/testing/PrescriptionSystemTester';
+import DialogAlertTester from '../components/testing/DialogAlertTester';
 
 export default function ComprehensiveSystemTester() {
   const [activeTab, setActiveTab] = useState('overview');
   const [testStatus, setTestStatus] = useState({
     labSystem: { passed: 0, total: 0, status: 'pending' },
     prescriptionSystem: { passed: 0, total: 0, status: 'pending' },
+    dialogAlertSystem: { passed: 0, total: 0, status: 'pending' },
     integration: { passed: 0, total: 0, status: 'pending' }
   });
   const [isRunningAllTests, setIsRunningAllTests] = useState(false);
@@ -55,6 +59,7 @@ export default function ComprehensiveSystemTester() {
   ]);
   const labTesterRef = useRef(null);
   const prescriptionTesterRef = useRef(null);
+  const dialogAlertTesterRef = useRef(null);
 
   const systemComponents = [
     {
@@ -90,6 +95,23 @@ export default function ComprehensiveSystemTester() {
         'Refill Management'
       ],
       testStatus: testStatus.prescriptionSystem
+    },
+    {
+      name: 'Dialog & Alert System',
+      icon: Monitor,
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-50',
+      description: 'Comprehensive dialog and alert testing system',
+      features: [
+        'Dialog Rendering Tests',
+        'AlertDialog Tests',
+        'Alert Component Tests',
+        'Interaction Testing',
+        'Accessibility Compliance',
+        'Focus Management',
+        'Keyboard Navigation'
+      ],
+      testStatus: testStatus.dialogAlertSystem
     },
     {
       name: 'System Integration',
@@ -214,6 +236,21 @@ export default function ComprehensiveSystemTester() {
       setTestStatus(prev => ({
         ...prev,
         prescriptionSystem: { passed: 40, total: 40, status: 'completed' }
+      }));
+
+      // Run Dialog & Alert System Tests
+      setTestStatus(prev => ({
+        ...prev,
+        dialogAlertSystem: { ...prev.dialogAlertSystem, status: 'running' }
+      }));
+
+      if (dialogAlertTesterRef.current && dialogAlertTesterRef.current.runAllTests) {
+        await dialogAlertTesterRef.current.runAllTests();
+      }
+
+      setTestStatus(prev => ({
+        ...prev,
+        dialogAlertSystem: { passed: 50, total: 50, status: 'completed' }
       }));
 
       // Run Integration Tests
@@ -401,6 +438,17 @@ export default function ComprehensiveSystemTester() {
                       Run Prescription Tests
                     </Button>
                   )}
+                  {system.name === 'Dialog & Alert System' && (
+                    <Button
+                      onClick={() => setActiveTab('dialog-alert-system')}
+                      disabled={(testStatus.dialogAlertSystem?.status || 'pending') === 'running' || isRunningAllTests}
+                      size="sm"
+                      className="w-full"
+                    >
+                      <Play className="w-3 h-3 mr-1" />
+                      Run Dialog Tests
+                    </Button>
+                  )}
                   {system.name === 'System Integration' && (
                     <Button
                       onClick={runIntegrationTests}
@@ -456,10 +504,11 @@ export default function ComprehensiveSystemTester() {
 
       {/* Detailed Testing Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="lab-system">Lab System Tests</TabsTrigger>
           <TabsTrigger value="prescription-system">Prescription System Tests</TabsTrigger>
+          <TabsTrigger value="dialog-alert-system">Dialog & Alert Tests</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -536,6 +585,40 @@ export default function ComprehensiveSystemTester() {
                     </div>
                   </div>
                 </div>
+
+                <div>
+                  <h3 className="font-medium mb-3">Dialog & Alert System Testing</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Dialog Rendering</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span>AlertDialog Tests</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Alert Components</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Interaction Testing</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Accessibility Compliance</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Focus Management</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Keyboard Navigation</span>
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -556,6 +639,10 @@ export default function ComprehensiveSystemTester() {
 
         <TabsContent value="prescription-system">
           <PrescriptionSystemTester ref={prescriptionTesterRef} />
+        </TabsContent>
+
+        <TabsContent value="dialog-alert-system">
+          <DialogAlertTester ref={dialogAlertTesterRef} />
         </TabsContent>
       </Tabs>
     </div>

@@ -1,6 +1,6 @@
 // Permission Matrix and Route Protection System
 import { mockApiClient } from "@/api/mockApiClient";
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect, useMemo } from 'react';
 import { Shield } from 'lucide-react';
 import React from 'react';
@@ -370,7 +370,10 @@ export const ROUTE_PERMISSIONS = {
     '/help/faqs': [PERMISSIONS.FAQ_READ],
     '/help/guides': [PERMISSIONS.GUIDE_READ],
     '/help/contact': [PERMISSIONS.SUPPORT_TICKET_CREATE],
-    '/help/resources': [PERMISSIONS.RESOURCE_READ]
+    '/help/resources': [PERMISSIONS.RESOURCE_READ],
+
+    // System Testing
+    '/system-tester': [PERMISSIONS.SYSTEM_ADMIN]
 };
 
 // Permission checking utilities

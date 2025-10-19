@@ -169,6 +169,61 @@ interface MockTelemedicine extends MockEntity {
   notes?: string;
 }
 
+interface MockSpecialist extends MockEntity {
+  full_name: string;
+  specialty: string;
+  email: string;
+  phone: string;
+  license_number: string;
+  years_of_experience: number;
+  qualifications: string[];
+  languages: string[];
+  consultation_fee: number;
+  availability: {
+    monday?: { start: string; end: string };
+    tuesday?: { start: string; end: string };
+    wednesday?: { start: string; end: string };
+    thursday?: { start: string; end: string };
+    friday?: { start: string; end: string };
+    saturday?: { start: string; end: string };
+    sunday?: { start: string; end: string };
+  };
+  bio: string;
+}
+
+interface MockConsultationTemplate extends MockEntity {
+  name: string;
+  specialty: string;
+  description: string;
+  template_content: string;
+  is_active: boolean;
+  variables: Array<{
+    name: string;
+    label: string;
+    type: 'text' | 'number' | 'date' | 'boolean' | 'select';
+    required: boolean;
+    options?: string[];
+    default_value?: string;
+  }>;
+}
+
+interface MockSpecialtyConsultation extends MockEntity {
+  patient_id: string;
+  patient_name: string;
+  specialist_id: string;
+  specialist_name: string;
+  template_id: string;
+  template_name: string;
+  consultation_date: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  summary: string;
+  consultation_data: Record<string, unknown>;
+}
+
+// Import consultation data
+// @ts-expect-error - Module has no type declarations
+import { mockSpecialists, mockConsultationTemplates, mockSpecialtyConsultations } from '@/data/consultationData';
+
 // Mock data
 const mockPatients: MockPatient[] = [
   {
@@ -991,7 +1046,10 @@ export const mockApiClient = {
     ComplianceRecord: new MockEntityManager(mockComplianceRecords),
     Telemedicine: new MockEntityManager(mockTelemedicineSessions),
     ProceduralReport: new MockEntityManager(mockProceduralReports),
-    Prescription: new MockEntityManager(mockPrescriptions)
+    Prescription: new MockEntityManager(mockPrescriptions),
+    Specialist: new MockEntityManager(mockSpecialists),
+    ConsultationTemplate: new MockEntityManager(mockConsultationTemplates),
+    SpecialtyConsultation: new MockEntityManager(mockSpecialtyConsultations)
   },
 
   // Health check
@@ -1004,17 +1062,25 @@ export const mockApiClient = {
     };
   },
 
-  // Authentication
+  // Authentication - PRODUCTION SAFE
   async authenticate(credentials: { username: string; password: string }) {
     await new Promise(resolve => setTimeout(resolve, 300));
-    if (credentials.username === 'admin' && credentials.password === 'admin') {
-      return {
-        token: 'mock-jwt-token',
-        user: mockUsers[0],
-        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-      };
+
+    // CRITICAL: Remove hardcoded credentials for production security
+    // Only allow mock authentication in development mode
+    if (import.meta.env.MODE === 'development' &&
+      import.meta.env.VITE_ALLOW_MOCK_AUTH === 'true') {
+      if (credentials.username === 'admin' && credentials.password === 'admin') {
+        return {
+          token: 'mock-jwt-token',
+          user: mockUsers[0],
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        };
+      }
     }
-    throw new Error('Invalid credentials');
+
+    // In production, this should never be called - use real API client
+    throw new Error('Mock authentication disabled in production. Use real API client.');
   },
 
   // Logout

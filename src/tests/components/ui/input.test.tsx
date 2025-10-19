@@ -13,7 +13,7 @@ describe('Input Component', () => {
 
         const input = screen.getByRole('textbox');
         expect(input).toBeInTheDocument();
-        expect(input).toHaveClass('flex', 'h-9', 'w-full');
+        expect(input).toHaveClass('flex', 'h-10', 'w-full', 'rounded-lg', 'border', 'border-outline', 'bg-surface', 'px-3', 'py-2', 'input-text', 'shadow-sm', 'transition-colors');
     });
 
     it('renders with different input types', () => {
@@ -30,7 +30,7 @@ describe('Input Component', () => {
         types.forEach(type => {
             const { unmount } = render(<Input type={type} />);
 
-            const input = screen.getByRole(type === 'password' ? 'textbox' : 'textbox');
+            const input = screen.getByDisplayValue('');
             expect(input).toHaveAttribute('type', type);
 
             unmount();
@@ -148,7 +148,7 @@ describe('Input Component', () => {
     it('renders with file input type', () => {
         render(<Input type="file" />);
 
-        const input = screen.getByRole('button');
+        const input = screen.getByDisplayValue('');
         expect(input).toHaveAttribute('type', 'file');
     });
 

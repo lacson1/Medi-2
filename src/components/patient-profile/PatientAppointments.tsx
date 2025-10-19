@@ -30,7 +30,7 @@ export default function PatientAppointments({ appointments, isLoading, onEdit, o
     );
   }
 
-  if (appointments.length === 0) {
+  if (!appointments || appointments.length === 0) {
     return (
       <div className="text-center py-12">
         <Calendar className="w-16 h-16 mx-auto text-gray-300 mb-4" />
@@ -42,6 +42,10 @@ export default function PatientAppointments({ appointments, isLoading, onEdit, o
   return (
     <div className="space-y-4">
       {appointments.map((apt: any) => {
+        if (!apt.appointment_date || !apt.id) {
+          return null;
+        }
+
         const date = parseISO(apt.appointment_date);
         const dateLabel = isToday(date) ? "Today" : isTomorrow(date) ? "Tomorrow" : format(date, "MMM d, yyyy");
         const isOverdue = isPast(date) && apt.status === 'scheduled';
@@ -49,17 +53,16 @@ export default function PatientAppointments({ appointments, isLoading, onEdit, o
         return (
           <div
             key={apt.id}
-            className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
-              isOverdue 
-                ? 'border-red-200 bg-red-50/50' 
-                : 'border-gray-200 bg-white'
-            }`}
+            className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${isOverdue
+              ? 'border-red-200 bg-red-50/50'
+              : 'border-gray-200 bg-white'
+              }`}
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <Badge className="bg-blue-100 text-blue-800 border-blue-200">
-                    {apt.type.replace('_', ' ')}
+                    {apt.type?.replace('_', ' ') || apt.type || 'Unknown'}
                   </Badge>
                   {isOverdue && (
                     <Badge className="bg-red-100 text-red-800 border-red-200">
@@ -79,7 +82,7 @@ export default function PatientAppointments({ appointments, isLoading, onEdit, o
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    {format(date, "h:mm a")} ({apt.duration}min)
+                    {format(date, "h:mm a")} ({apt.duration || 'N/A'}min)
                   </div>
                 </div>
 
@@ -91,8 +94,8 @@ export default function PatientAppointments({ appointments, isLoading, onEdit, o
               <div className="flex items-center gap-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className={statusColors[apt.status]}>
-                      {apt.status.replace('_', ' ')}
+                    <Button variant="outline" size="sm" className={statusColors[apt.status] || statusColors.scheduled}>
+                      {apt.status?.replace('_', ' ') || apt.status || 'Unknown'}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>

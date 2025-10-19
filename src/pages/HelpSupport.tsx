@@ -40,7 +40,7 @@ import {
   Send,
   RefreshCw
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { mockApiClient } from "@/api/mockApiClient";
 import { toast } from 'sonner';
 

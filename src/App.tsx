@@ -1,7 +1,8 @@
 import './App.css'
 import { lazy, Suspense, useEffect, memo } from 'react'
 import { Toaster } from "@/components/ui/sonner"
-import { AuthProvider, useAuth } from "@/contexts/AuthContext"
+import { AuthProvider } from "@/contexts/AuthContext"
+import { useAuth } from "@/hooks/useAuth"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import ErrorBoundary from '@/components/ErrorBoundary'

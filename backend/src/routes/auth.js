@@ -51,14 +51,23 @@ router.post('/login', async(req, res, next) => {
             'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [user.id]
         );
 
-        // Generate JWT token
+        // Generate JWT token with proper secret validation
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret || jwtSecret === 'fallback-secret') {
+            logger.error('JWT_SECRET not properly configured');
+            return res.status(500).json({
+                success: false,
+                message: 'Server configuration error'
+            });
+        }
+
         const token = jwt.sign({
                 userId: user.id,
                 email: user.email,
                 role: user.role,
                 organizationId: user.organization_id
             },
-            process.env.JWT_SECRET || 'fallback-secret', { expiresIn: '24h' }
+            jwtSecret, { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
         );
 
         // Remove password from response

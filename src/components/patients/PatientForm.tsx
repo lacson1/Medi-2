@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { X, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { AllergyField, ConditionField, InsuranceField } from "@/components/forms/EnhancedFormFields";
 
 export default function PatientForm({ patient, onSubmit, onCancel, isSubmitting }: any) {
   const [formData, setFormData] = useState(patient || {
@@ -212,19 +213,39 @@ export default function PatientForm({ patient, onSubmit, onCancel, isSubmitting 
               />
             </div>
 
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <InsuranceField
+                  name="insurance_provider"
+                  label="Insurance Provider"
+                  placeholder="Select insurance provider"
+                  value={formData.insurance_provider}
+                  onChange={(value) => setFormData({ ...formData, insurance_provider: value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{"Insurance ID"}</Label>
+                <Input
+                  value={formData.insurance_id}
+                  onChange={(e) => setFormData({ ...formData, insurance_id: e.target.value })}
+                  placeholder="Enter insurance ID"
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label>{"Allergies"}</Label>
               <div className="flex gap-2">
-                <Input
-                  placeholder="Add allergy"
+                <AllergyField
+                  name="newAllergy"
+                  placeholder="Add allergy (e.g., Penicillin, Shellfish)"
                   value={newAllergy}
-                  onChange={(e) => setNewAllergy(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addAllergy();
-                    }
+                  onChange={(value) => setNewAllergy(value)}
+                  onSelect={(suggestion) => {
+                    setNewAllergy(suggestion.label);
+                    addAllergy();
                   }}
+                  className="flex-1"
                 />
                 <Button type="button" onClick={addAllergy} size="icon" aria-label="Add allergy">
                   <Plus className="w-4 h-4" />
@@ -245,16 +266,16 @@ export default function PatientForm({ patient, onSubmit, onCancel, isSubmitting 
             <div className="space-y-2">
               <Label>{"Medical Conditions"}</Label>
               <div className="flex gap-2">
-                <Input
-                  placeholder="Add condition"
+                <ConditionField
+                  name="newCondition"
+                  placeholder="Add condition (e.g., Hypertension, Diabetes)"
                   value={newCondition}
-                  onChange={(e) => setNewCondition(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addCondition();
-                    }
+                  onChange={(value) => setNewCondition(value)}
+                  onSelect={(suggestion) => {
+                    setNewCondition(suggestion.label);
+                    addCondition();
                   }}
+                  className="flex-1"
                 />
                 <Button type="button" onClick={addCondition} size="icon" aria-label="Add medical condition">
                   <Plus className="w-4 h-4" />

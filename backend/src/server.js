@@ -11,19 +11,16 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 
-// Import routes
+// Import utilities
+import { createCRUDHandlers } from './utils/crudHandlers.js';
+import { createRouter } from './utils/routeGenerator.js';
+
+// Import specialized routes (non-CRUD)
 import authRoutes from './routes/auth.js';
-import patientRoutes from './routes/patients.js';
-import userRoutes from './routes/users.js';
-import appointmentRoutes from './routes/appointments.js';
-import organizationRoutes from './routes/organizations.js';
-import encounterRoutes from './routes/encounters.js';
-import billingRoutes from './routes/billing.js';
-import labOrderRoutes from './routes/labOrders.js';
-import prescriptionRoutes from './routes/prescriptions.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
+import { formatResponse, formatErrorResponse } from './middleware/responseFormatter.js';
 import { logger } from './utils/logger.js';
 
 // Load environment variables
@@ -31,6 +28,49 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Create CRUD handlers for different resources
+const patientsHandlers = createCRUDHandlers('patients', [
+    'first_name', 'last_name', 'email', 'phone', 'date_of_birth',
+    'address', 'emergency_contact', 'medical_history', 'allergies',
+    'insurance_info', 'preferred_language', 'gender'
+]);
+
+const appointmentsHandlers = createCRUDHandlers('appointments', [
+    'patient_id', 'doctor_id', 'appointment_date', 'appointment_time',
+    'status', 'notes', 'appointment_type', 'duration', 'location'
+]);
+
+const prescriptionsHandlers = createCRUDHandlers('prescriptions', [
+    'patient_id', 'doctor_id', 'medication', 'dosage', 'instructions',
+    'start_date', 'end_date', 'refills', 'status', 'pharmacy_notes'
+]);
+
+const labOrdersHandlers = createCRUDHandlers('lab_orders', [
+    'patient_id', 'doctor_id', 'test_name', 'test_type', 'status',
+    'order_date', 'results', 'notes', 'lab_location', 'priority'
+]);
+
+const usersHandlers = createCRUDHandlers('users', [
+    'first_name', 'last_name', 'email', 'role', 'organization_id',
+    'job_title', 'department', 'specialization', 'phone', 'is_active',
+    'license_number', 'npi_number'
+]);
+
+const organizationsHandlers = createCRUDHandlers('organizations', [
+    'name', 'email', 'phone', 'address', 'type', 'is_active',
+    'license_number', 'tax_id', 'website', 'description'
+]);
+
+const billingHandlers = createCRUDHandlers('billing', [
+    'patient_id', 'appointment_id', 'amount', 'status', 'due_date',
+    'payment_method', 'insurance_info', 'notes', 'invoice_number'
+]);
+
+const encountersHandlers = createCRUDHandlers('encounters', [
+    'patient_id', 'doctor_id', 'encounter_date', 'encounter_type',
+    'chief_complaint', 'diagnosis', 'treatment_plan', 'notes', 'status'
+]);
 
 // Security middleware
 app.use(helmet({
@@ -75,6 +115,9 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Apply response formatter middleware
+app.use('/api', formatResponse);
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({
@@ -87,14 +130,39 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/patients', patientRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/organizations', organizationRoutes);
-app.use('/api/encounters', encounterRoutes);
-app.use('/api/billing', billingRoutes);
-app.use('/api/lab-orders', labOrderRoutes);
-app.use('/api/prescriptions', prescriptionRoutes);
+
+// CRUD routes with role-based access control
+app.use('/api/patients', createRouter(patientsHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin', 'Doctor', 'Nurse']
+}));
+
+app.use('/api/appointments', createRouter(appointmentsHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin', 'Doctor', 'Nurse']
+}));
+
+app.use('/api/prescriptions', createRouter(prescriptionsHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin', 'Doctor']
+}));
+
+app.use('/api/lab-orders', createRouter(labOrdersHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin', 'Doctor', 'LabTech']
+}));
+
+app.use('/api/users', createRouter(usersHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin']
+}));
+
+app.use('/api/organizations', createRouter(organizationsHandlers, {
+    allowedRoles: ['SuperAdmin']
+}));
+
+app.use('/api/billing', createRouter(billingHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin', 'Billing']
+}));
+
+app.use('/api/encounters', createRouter(encountersHandlers, {
+    allowedRoles: ['SuperAdmin', 'Admin', 'Doctor', 'Nurse']
+}));
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -116,6 +184,7 @@ app.use('*', (req, res) => {
 });
 
 // Error handling middleware
+app.use(formatErrorResponse);
 app.use(errorHandler);
 
 // Start server

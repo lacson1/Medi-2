@@ -49,7 +49,7 @@ import {
   Lock,
   Unlock
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { SYSTEM_ROLES, PERMISSION_CATEGORIES } from '@/utils/enhancedRoleManagement';
 import { mockApiClient } from "@/api/mockApiClient";
 

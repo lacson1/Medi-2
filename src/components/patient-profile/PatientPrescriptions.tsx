@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pill, Edit, Calendar, Printer, Send, Activity } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import PropTypes from "prop-types";
 import MedicationFlowManager from "../prescriptions/MedicationFlowManager";
 import PrintablePrescriptionForm from "../prescriptions/PrintablePrescriptionForm";
@@ -39,7 +39,7 @@ export default function PatientPrescriptions({ prescriptions, isLoading, onEdit,
     const organizationName = user?.organization || 'Medical Practice';
     const doctorName = prescription.prescribing_doctor || user?.name || 'Dr. Smith';
     const currentDate = new Date().toLocaleDateString();
-    
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -172,7 +172,7 @@ export default function PatientPrescriptions({ prescriptions, isLoading, onEdit,
       </body>
       </html>
     `);
-    
+
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => {
@@ -220,15 +220,15 @@ export default function PatientPrescriptions({ prescriptions, isLoading, onEdit,
         </TabsList>
 
         <TabsContent value="flow">
-          <MedicationFlowManager 
-            prescriptions={prescriptions} 
-            patient={patient} 
+          <MedicationFlowManager
+            prescriptions={prescriptions}
+            patient={patient}
             onAction={handleAction}
           />
         </TabsContent>
 
         <TabsContent value="list">
-          {prescriptions.length === 0 ? (
+          {!prescriptions || prescriptions.length === 0 ? (
             <div className="text-center py-12">
               <Pill className="w-16 h-16 mx-auto text-gray-300 mb-4" />
               <p className="text-gray-500">No prescriptions on record</p>
@@ -258,27 +258,27 @@ export default function PatientPrescriptions({ prescriptions, isLoading, onEdit,
                       {rx.notes && <p className="text-sm italic text-gray-500 mt-2">{rx.notes}</p>}
                     </div>
                     <div className="flex gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleAction('print', rx)}
                         className="text-green-600 hover:text-green-700 hover:bg-green-50"
                         title="Print Prescription"
                       >
                         <Printer className="w-4 h-4" />
                       </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleAction('send', rx)}
                         className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                         title="Send to Pharmacy"
                       >
                         <Send className="w-4 h-4" />
                       </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleAction('edit', rx)}
                         title="Edit Prescription"
                       >

@@ -5,10 +5,13 @@
 
 // Environment variables with fallbacks
 export const API_CONFIG = {
-    // Disable mock data by default - use real API
-    useMockData: import.meta.env.VITE_USE_MOCK_DATA === 'true',
+    // Use environment variable for mock data, default to false in production
+    useMockData: import.meta.env.VITE_USE_MOCK_DATA === 'true' && import.meta.env.MODE !== 'production',
     isDevelopment: import.meta.env.MODE === 'development',
-    isProduction: import.meta.env.MODE === 'production'
+    isProduction: import.meta.env.MODE === 'production',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || (import.meta.env.MODE === 'production' ? 'https://api.yourdomain.com' : 'http://localhost:3001'),
+    enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+    enableDebugMode: import.meta.env.VITE_ENABLE_DEBUG_MODE === 'true' && import.meta.env.MODE !== 'production'
 } as const;
 
 // Validate required configuration

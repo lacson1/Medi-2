@@ -1,30 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { mockApiClient } from "@/api/mockApiClient";
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  FileText, 
-  Download, 
-  Calendar, 
-  BarChart3, 
-  TrendingUp, 
-  TrendingDown,
-  Users,
+import {
+  FileText,
+  Download,
+  BarChart3,
+  TrendingUp,
   Activity,
   Clock,
   CheckCircle,
   AlertTriangle,
-  Filter,
-  Search,
-  Eye,
   Printer
 } from 'lucide-react';
-import { format, parseISO, startOfMonth, endOfMonth, startOfWeek, endOfWeek, differenceInDays, isAfter, isBefore } from 'date-fns';
+import { format, parseISO, startOfMonth, endOfMonth, differenceInDays, isAfter, isBefore } from 'date-fns';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 
@@ -37,35 +28,31 @@ const REPORT_TYPES = {
   custom: { label: 'Custom Report', color: 'bg-gray-100 text-gray-800' }
 };
 
-const REPORT_CATEGORIES = {
-  performance: { label: 'Performance Metrics', icon: BarChart3 },
-  quality: { label: 'Quality Control', icon: CheckCircle },
-  productivity: { label: 'Productivity', icon: Activity },
-  compliance: { label: 'Compliance', icon: AlertTriangle },
-  financial: { label: 'Financial', icon: TrendingUp },
-  inventory: { label: 'Inventory', icon: FileText }
-};
-
-export default function LabReports({ labOrders = [], patients = [] }: any) {
+export default function LabReports({ labOrders = [] }: any) {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedReportType, setSelectedReportType] = useState('monthly');
   const [dateRange, setDateRange] = useState({
     start: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
     end: format(endOfMonth(new Date()), 'yyyy-MM-dd')
   });
-  const [filters, setFilters] = useState({
-    category: 'all',
-    search: ''
-  });
 
   // Generate mock report data based on lab orders
   const generateReportData = () => {
     const startDate = parseISO(dateRange.start);
     const endDate = parseISO(dateRange.end);
-    
+
     const filteredOrders = labOrders.filter(order => {
-      const orderDate = parseISO(order.date_ordered);
-      return isAfter(orderDate, startDate) && isBefore(orderDate, endDate);
+      // Use the correct field name and add null safety
+      const orderDateString = order.order_date || order.date_ordered;
+      if (!orderDateString) return false;
+
+      try {
+        const orderDate = parseISO(orderDateString);
+        return isAfter(orderDate, startDate) && isBefore(orderDate, endDate);
+      } catch (error) {
+        console.warn('Invalid date format for lab order:', order.id, orderDateString);
+        return false;
+      }
     });
 
     const totalOrders = filteredOrders.length;
@@ -90,16 +77,24 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
     const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
       const dayOrders = filteredOrders.filter(order => {
-        const orderDate = parseISO(order.date_ordered);
-        return orderDate.toDateString() === currentDate.toDateString();
+        const orderDateString = order.order_date || order.date_ordered;
+        if (!orderDateString) return false;
+
+        try {
+          const orderDate = parseISO(orderDateString);
+          return orderDate.toDateString() === currentDate.toDateString();
+        } catch (error) {
+          console.warn('Invalid date format for lab order:', order.id, orderDateString);
+          return false;
+        }
       });
-      
+
       dailyTrends.push({
         date: format(currentDate, 'MMM d'),
         orders: dayOrders.length,
         completed: dayOrders.filter(o => o.status === 'completed').length
       });
-      
+
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
@@ -176,7 +171,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
               <Input
                 type="date"
                 value={dateRange.start}
-                onChange={(e) => setDateRange({...dateRange, start: e.target.value})}
+                onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
               />
             </div>
 
@@ -185,7 +180,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
               <Input
                 type="date"
                 value={dateRange.end}
-                onChange={(e) => setDateRange({...dateRange, end: e.target.value})}
+                onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
               />
             </div>
 
@@ -279,7 +274,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
                       <span className="text-sm text-gray-600">{reportData.completedOrders}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Pending</span>
                     <div className="flex items-center gap-2">
@@ -287,7 +282,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
                       <span className="text-sm text-gray-600">{reportData.pendingOrders}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Urgent</span>
                     <div className="flex items-center gap-2">
@@ -295,7 +290,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
                       <span className="text-sm text-gray-600">{reportData.urgentOrders}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">STAT</span>
                     <div className="flex items-center gap-2">
@@ -349,13 +344,13 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
                   <p className="text-2xl font-bold text-red-600">{reportData.statOrders}</p>
                   <p className="text-sm text-gray-600">STAT Orders</p>
                 </div>
-                
+
                 <div className="text-center p-4 bg-orange-50 rounded-lg">
                   <Clock className="w-8 h-8 text-orange-600 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-orange-600">{reportData.urgentOrders}</p>
                   <p className="text-sm text-gray-600">Urgent Orders</p>
                 </div>
-                
+
                 <div className="text-center p-4 bg-yellow-50 rounded-lg">
                   <Activity className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-yellow-600">{reportData.pendingOrders}</p>
@@ -383,7 +378,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
                     <p className="text-3xl font-bold text-blue-600">{reportData.avgTurnaroundTime}h</p>
                     <p className="text-sm text-gray-600">Average Turnaround Time</p>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>STAT Orders</span>
@@ -416,7 +411,7 @@ export default function LabReports({ labOrders = [], patients = [] }: any) {
                     <p className="text-3xl font-bold text-green-600">{reportData.completionRate}%</p>
                     <p className="text-sm text-gray-600">Completion Rate</p>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Orders per Day</span>

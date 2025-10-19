@@ -223,7 +223,7 @@ export default function PatientLabOrders({ labOrders, isLoading, onEdit, onAddNe
   }
 
   // Filter lab orders based on current filters
-  const filteredLabOrders = labOrders.filter(order => {
+  const filteredLabOrders = (labOrders || []).filter(order => {
     if (filters.status !== 'all' && order.status !== filters.status) return false;
     if (filters.priority !== 'all' && order.priority !== filters.priority) return false;
     if (filters.category !== 'all' && order.test_category !== filters.category) return false;

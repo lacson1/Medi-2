@@ -51,7 +51,7 @@ export default function PatientBilling({ billings, isLoading, onEdit }: any) {
         const config = statusConfig[bill.status] || statusConfig.pending;
         const StatusIcon = config.icon;
         const isOverdue = bill.status === 'pending' && isPast(parseISO(bill.due_date));
-        
+
         return (
           <Card key={bill.id} className="border-2 border-gray-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
@@ -62,16 +62,16 @@ export default function PatientBilling({ billings, isLoading, onEdit }: any) {
                     <h4 className="font-bold text-lg">{bill.invoice_number}</h4>
                     <Badge className={config.color}>
                       <StatusIcon className="w-3 h-3 mr-1" />
-                      {bill.status.replace('_', ' ')}
+                      {bill.status?.replace('_', ' ') || bill.status || 'Unknown'}
                     </Badge>
                     {isOverdue && <Badge className="bg-red-100 text-red-800">Overdue</Badge>}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-gray-600">Service: </span>
-                        <strong>{bill.service_type.replace('_', ' ')}</strong>
+                        <strong>{bill.service_type?.replace('_', ' ') || bill.service_type || 'Unknown'}</strong>
                       </div>
                       <div>
                         <span className="text-gray-600">Invoice Date: </span>
@@ -86,11 +86,11 @@ export default function PatientBilling({ billings, isLoading, onEdit }: any) {
                         <strong>{bill.payment_method || 'Not specified'}</strong>
                       </div>
                     </div>
-                    
+
                     {bill.description && (
                       <p className="text-sm text-gray-600 mt-2">{bill.description}</p>
                     )}
-                    
+
                     <div className="grid grid-cols-3 gap-4 mt-3 p-3 bg-gray-50 rounded-lg">
                       <div>
                         <span className="text-xs text-gray-600">Total Amount</span>
@@ -107,7 +107,7 @@ export default function PatientBilling({ billings, isLoading, onEdit }: any) {
                     </div>
                   </div>
                 </div>
-                
+
                 <Button variant="ghost" size="icon" onClick={() => onEdit(bill)}>
                   <Edit className="w-4 h-4" />
                 </Button>

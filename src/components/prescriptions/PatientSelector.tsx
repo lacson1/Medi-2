@@ -20,7 +20,7 @@ import {
 
 interface Patient {
     id: string;
-    name: string;
+    name?: string;
     age: number;
     gender: string;
     weight?: number;
@@ -66,7 +66,7 @@ export default function PatientSelector({
     useEffect(() => {
         if (searchTerm) {
             const filtered = patients.filter(patient =>
-                patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (patient.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
                 patient.id.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setFilteredPatients(filtered);
@@ -75,7 +75,8 @@ export default function PatientSelector({
         }
     }, [searchTerm, patients]);
 
-    const getInitials = (name: string) => {
+    const getInitials = (name: string | undefined) => {
+        if (!name) return '??';
         return name.split(' ').map(n => n[0]).join('').toUpperCase();
     };
 
@@ -115,7 +116,7 @@ export default function PatientSelector({
                                 <AvatarFallback>{getInitials(selectedPatient.name)}</AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
-                                <h3 className="font-semibold text-lg">{selectedPatient.name}</h3>
+                                <h3 className="font-semibold text-lg">{selectedPatient.name || 'Unknown Patient'}</h3>
                                 <p className="text-sm text-gray-600">
                                     {selectedPatient.age} years old • {selectedPatient.gender}
                                     {selectedPatient.weight && ` • ${selectedPatient.weight}kg`}
@@ -196,7 +197,7 @@ export default function PatientSelector({
                                     <AvatarFallback>{getInitials(patient.name)}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
-                                    <h3 className="font-medium">{patient.name}</h3>
+                                    <h3 className="font-medium">{patient.name || 'Unknown Patient'}</h3>
                                     <p className="text-sm text-gray-600">
                                         {patient.age} years old • {patient.gender}
                                         {patient.weight && ` • ${patient.weight}kg`}

@@ -255,4 +255,4 @@ jobs:
           status: ${{ job.status }}
           channel: "#deployments"
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL || '' }}

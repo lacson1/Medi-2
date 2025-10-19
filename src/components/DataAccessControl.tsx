@@ -1,6 +1,6 @@
 // Comprehensive Data Access Control Component
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { consentManager, CONSENT_TYPES, CONSENT_STATUSES } from '@/utils/consentManager';
 import { auditLogger, AUDIT_ACTIONS } from '@/utils/auditLogger.tsx';
 import { notificationScheduler, NOTIFICATION_TYPES } from '@/utils/notificationSystem';

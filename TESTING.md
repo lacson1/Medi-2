@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive TypeScript test suite for the MediFlow application. The test suite provides type-safe testing with high coverage and multiple testing strategies.
+This document describes the comprehensive TypeScript test suite for the MediFlow application. The test suite provides type-safe testing with high coverage and multiple testing strategies, including comprehensive CRUD (Create, Read, Update, Delete) testing for all entities.
 
 ## Test Structure
 
@@ -10,19 +10,23 @@ This document describes the comprehensive TypeScript test suite for the MediFlow
 src/tests/
 ├── setup.ts                    # Test setup and configuration
 ├── components/                 # Component tests
-│   └── ui/                    # UI component tests
-│       ├── button.test.tsx
-│       ├── input.test.tsx
-│       ├── card.test.tsx
-│       ├── label.test.tsx
-│       ├── badge.test.tsx
-│       └── select.test.tsx
+│   ├── ui/                    # UI component tests
+│   │   ├── button.test.tsx
+│   │   ├── input.test.tsx
+│   │   ├── card.test.tsx
+│   │   ├── label.test.tsx
+│   │   ├── badge.test.tsx
+│   │   └── select.test.tsx
+│   ├── PatientCard.test.tsx
+│   └── crudComponents.test.tsx # CRUD component tests
 ├── api/                       # API layer tests
-│   └── apiClient.test.ts
+│   ├── apiClient.test.ts
+│   └── crud.test.ts          # Comprehensive CRUD API tests
 ├── contexts/                  # Context provider tests
 │   └── AuthContext.test.tsx
 ├── hooks/                     # Custom hook tests
-│   └── useApi.test.ts
+│   ├── useApi.test.tsx
+│   └── crudHooks.test.tsx    # CRUD React Query hook tests
 ├── utils/                     # Utility function tests
 │   ├── validationSchemas.test.ts
 │   ├── security.test.ts
@@ -30,8 +34,14 @@ src/tests/
 │   └── index.test.ts
 ├── lib/                       # Library tests
 │   └── monitoring.test.ts
-└── types/                     # Type definition tests
-    └── index.test.ts
+├── types/                     # Type definition tests
+│   └── index.test.ts
+├── e2e/                       # End-to-end tests
+│   ├── enhanced-patient-workspace-orders.test.ts
+│   └── crudWorkflows.test.ts  # CRUD E2E workflow tests
+└── mocks/                     # Mock data and handlers
+    ├── handlers.ts
+    └── server.ts
 ```
 
 ## Test Configuration
@@ -82,17 +92,39 @@ src/tests/
 
 **Command**: `npm run test:integration`
 
-### 3. End-to-End Tests
+### 3. CRUD Tests
+
+**Purpose**: Test Create, Read, Update, Delete operations for all entities
+
+**Location**: `src/tests/api/crud.test.ts`, `src/tests/hooks/crudHooks.test.tsx`, `src/tests/components/crudComponents.test.tsx`
+
+**Examples**:
+- Patient CRUD operations
+- Appointment scheduling and management
+- Prescription creation and updates
+- Lab order processing
+- Billing record management
+- User and organization management
+
+**Commands**:
+- `npm run test:crud` - Run all CRUD tests
+- `npm run test:crud:unit` - API-level CRUD tests
+- `npm run test:crud:hooks` - React Query hook tests
+- `npm run test:crud:components` - Component tests
+- `npm run test:crud:e2e` - E2E workflow tests
+
+### 4. End-to-End Tests
 
 **Purpose**: Test complete user workflows
 
-**Location**: `playwright/` (separate from unit tests)
+**Location**: `src/tests/e2e/`, `playwright/` (separate from unit tests)
 
 **Examples**:
 - User login flow
 - Patient creation workflow
 - Appointment scheduling
 - Billing process
+- Complete CRUD workflows
 
 **Command**: `npm run test:e2e`
 

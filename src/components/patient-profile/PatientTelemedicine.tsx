@@ -32,7 +32,7 @@ export default function PatientTelemedicine({ sessions, isLoading, onEdit, onJoi
                 <div className="flex items-center gap-2 mb-2">
                   <Video className="w-5 h-5 text-indigo-600" />
                   <h4 className="font-bold text-lg">{session.session_topic}</h4>
-                  <Badge className={config.color}>{session.status.replace('_', ' ')}</Badge>
+                  <Badge className={config.color}>{session.status?.replace('_', ' ') || session.status || 'Unknown'}</Badge>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                   <div className="flex items-center gap-1"><Calendar className="w-4 h-4" />{format(date, "MMM d, yyyy")}</div>
@@ -42,12 +42,12 @@ export default function PatientTelemedicine({ sessions, isLoading, onEdit, onJoi
               </div>
               <div className="flex items-center gap-2">
                 {session.status === 'scheduled' && session.meeting_link && (
-                    <Button asChild size="sm" className="bg-green-600 hover:bg-green-700">
-                        <a href={session.meeting_link} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="w-4 h-4 mr-2"/>
-                            Join Call
-                        </a>
-                    </Button>
+                  <Button asChild size="sm" className="bg-green-600 hover:bg-green-700">
+                    <a href={session.meeting_link} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Join Call
+                    </a>
+                  </Button>
                 )}
                 <Button variant="ghost" size="icon" onClick={() => onEdit(session)}><Edit className="w-4 h-4" /></Button>
               </div>

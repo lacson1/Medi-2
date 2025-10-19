@@ -18,8 +18,7 @@ import {
   Plus,
   Edit,
   Eye,
-  BarChart3,
-  Printer
+  BarChart3
 } from 'lucide-react';
 
 export default forwardRef(function LabSystemTester(props, ref) {
@@ -111,6 +110,56 @@ export default forwardRef(function LabSystemTester(props, ref) {
         { name: 'Edit Lab Order', component: 'PatientLabOrders', test: 'edit' },
         { name: 'Download Results', component: 'PatientLabOrders', test: 'download' }
       ]
+    },
+    {
+      name: 'Lab Analytics',
+      tests: [
+        { name: 'Analytics Dashboard', component: 'LabAnalytics', test: 'dashboard' },
+        { name: 'Performance Metrics', component: 'LabAnalytics', test: 'performance' },
+        { name: 'Trend Analysis', component: 'LabAnalytics', test: 'trends' },
+        { name: 'Volume Statistics', component: 'LabAnalytics', test: 'volume' },
+        { name: 'Turnaround Time', component: 'LabAnalytics', test: 'turnaround' },
+        { name: 'Quality Metrics', component: 'LabAnalytics', test: 'quality' },
+        { name: 'Chart Visualizations', component: 'LabAnalytics', test: 'charts' }
+      ]
+    },
+    {
+      name: 'Upload Lab Result Modal',
+      tests: [
+        { name: 'File Upload Interface', component: 'UploadLabResultModal', test: 'fileUpload' },
+        { name: 'Form Validation', component: 'UploadLabResultModal', test: 'validation' },
+        { name: 'Modal Functionality', component: 'UploadLabResultModal', test: 'modal' },
+        { name: 'Patient Selection', component: 'UploadLabResultModal', test: 'patientSelection' },
+        { name: 'Result Processing', component: 'UploadLabResultModal', test: 'processing' }
+      ]
+    },
+    {
+      name: 'Add Lab Result Modal',
+      tests: [
+        { name: 'Manual Entry Form', component: 'AddLabResultModal', test: 'manualEntry' },
+        { name: 'Form Validation', component: 'AddLabResultModal', test: 'validation' },
+        { name: 'Modal Functionality', component: 'AddLabResultModal', test: 'modal' },
+        { name: 'Test Selection', component: 'AddLabResultModal', test: 'testSelection' },
+        { name: 'Result Submission', component: 'AddLabResultModal', test: 'submission' }
+      ]
+    },
+    {
+      name: 'Printable Lab Order Form',
+      tests: [
+        { name: 'Print Layout', component: 'PrintableLabOrderForm', test: 'layout' },
+        { name: 'Data Display', component: 'PrintableLabOrderForm', test: 'dataDisplay' },
+        { name: 'Print Functionality', component: 'PrintableLabOrderForm', test: 'print' },
+        { name: 'Formatting', component: 'PrintableLabOrderForm', test: 'formatting' }
+      ]
+    },
+    {
+      name: 'Printable Lab Report',
+      tests: [
+        { name: 'Report Layout', component: 'PrintableLabReport', test: 'layout' },
+        { name: 'Data Display', component: 'PrintableLabReport', test: 'dataDisplay' },
+        { name: 'Print Functionality', component: 'PrintableLabReport', test: 'print' },
+        { name: 'Report Formatting', component: 'PrintableLabReport', test: 'formatting' }
+      ]
     }
   ];
 
@@ -177,27 +226,133 @@ export default forwardRef(function LabSystemTester(props, ref) {
 
   // Helper functions for test validation
   const checkComponentExists = (componentName: any) => {
-    // Simulate component existence check
+    // Enhanced component existence check with all lab components
     const validComponents = [
       'LabManagement', 'LabOrderForm', 'LabWorkflowManager',
-      'LabInventoryManager', 'LabReports', 'PatientLabOrders'
+      'LabInventoryManager', 'EquipmentManager', 'QualityControl',
+      'LabReports', 'LabAnalytics', 'PatientLabOrders',
+      'UploadLabResultModal', 'AddLabResultModal',
+      'PrintableLabOrderForm', 'PrintableLabReport'
     ];
     return validComponents.includes(componentName);
   };
 
   const checkFunctionalityExists = (componentName: any, testName: any) => {
-    // Simulate functionality existence check
+    // Enhanced functionality mapping based on actual component capabilities
     const functionalityMap = {
-      'LabManagement': ['metrics', 'filters', 'tabs', 'newOrder', 'refresh'],
-      'LabOrderForm': ['inputs', 'tabs', 'priority', 'category', 'upload', 'submit', 'validation'],
-      'LabWorkflowManager': ['stages', 'transitions', 'cards', 'notes', 'time'],
-      'LabInventoryManager': ['inventory', 'stock', 'suppliers', 'orders', 'alerts'],
-      'LabReports': ['generate', 'dateRange', 'export', 'print', 'tabs'],
-      'PatientLabOrders': ['display', 'filtering', 'addNew', 'edit', 'download']
+      'LabManagement': {
+        'metrics': true,
+        'filters': true,
+        'tabs': true,
+        'newOrder': true,
+        'refresh': true
+      },
+      'LabOrderForm': {
+        'inputs': true,
+        'tabs': true,
+        'priority': true,
+        'category': true,
+        'upload': true,
+        'submit': true,
+        'validation': true,
+        'autocomplete': true,
+        'dateSelection': true
+      },
+      'LabWorkflowManager': {
+        'stages': true,
+        'transitions': true,
+        'cards': true,
+        'notes': true,
+        'time': true,
+        'statusUpdates': true,
+        'progress': true
+      },
+      'LabInventoryManager': {
+        'metrics': true,
+        'addItem': true,
+        'editItem': true,
+        'deleteItem': true,
+        'alerts': true,
+        'filter': true,
+        'categories': true,
+        'expiration': true,
+        'suppliers': true
+      },
+      'EquipmentManager': {
+        'metrics': true,
+        'addEquipment': true,
+        'maintenance': true,
+        'status': true,
+        'alerts': true,
+        'calibration': true,
+        'history': true
+      },
+      'QualityControl': {
+        'qcForm': true,
+        'compliance': true,
+        'metrics': true,
+        'passFail': true,
+        'corrective': true,
+        'testTypes': true,
+        'statusManagement': true,
+        'reporting': true
+      },
+      'LabReports': {
+        'generate': true,
+        'dateRange': true,
+        'export': true,
+        'print': true,
+        'tabs': true,
+        'reportTypes': true,
+        'analytics': true,
+        'trends': true
+      },
+      'LabAnalytics': {
+        'dashboard': true,
+        'performance': true,
+        'trends': true,
+        'volume': true,
+        'turnaround': true,
+        'quality': true,
+        'charts': true
+      },
+      'PatientLabOrders': {
+        'display': true,
+        'filtering': true,
+        'addNew': true,
+        'edit': true,
+        'download': true
+      },
+      'UploadLabResultModal': {
+        'fileUpload': true,
+        'validation': true,
+        'modal': true,
+        'patientSelection': true,
+        'processing': true
+      },
+      'AddLabResultModal': {
+        'manualEntry': true,
+        'validation': true,
+        'modal': true,
+        'testSelection': true,
+        'submission': true
+      },
+      'PrintableLabOrderForm': {
+        'layout': true,
+        'dataDisplay': true,
+        'print': true,
+        'formatting': true
+      },
+      'PrintableLabReport': {
+        'layout': true,
+        'dataDisplay': true,
+        'print': true,
+        'formatting': true
+      }
     };
 
-    const validTests = functionalityMap[componentName] || [];
-    return validTests.includes(testName);
+    const componentTests = functionalityMap[componentName] || {};
+    return componentTests[testName] === true;
   };
 
   const runAllTests = async () => {

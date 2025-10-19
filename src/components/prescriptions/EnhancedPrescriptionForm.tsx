@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Pill,
   User,
@@ -17,9 +16,7 @@ import {
   Smartphone,
   CheckCircle,
   AlertTriangle,
-  Zap,
-  Save,
-  Send
+  Zap
 } from 'lucide-react';
 
 // Import all the enhanced components
@@ -31,6 +28,9 @@ import MobileOptimizedForm from './MobileOptimizedForm';
 
 // Import templates and enhanced patient data
 import { prescriptionTemplates, enhancedPatients } from '@/data/prescriptionTemplates';
+
+// Import enhanced form fields
+import { MedicationField, ConditionField } from '@/components/forms/EnhancedFormFields';
 
 interface EnhancedPrescriptionFormProps {
   prescription?: any;
@@ -308,21 +308,28 @@ export default function EnhancedPrescriptionForm({
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="medication_name">Medication Name</Label>
-                    <Input
-                      id="medication_name"
+                    <MedicationField
+                      name="medication_name"
+                      label="Medication Name"
+                      placeholder="Enter medication name (e.g., Metformin, Lisinopril)"
                       value={formData.medication_name}
-                      onChange={(e) => setFormData({ ...formData, medication_name: e.target.value })}
-                      placeholder="Enter medication name"
+                      onChange={(value) => setFormData({ ...formData, medication_name: value })}
+                      onSelect={(suggestion) => {
+                        setFormData({
+                          ...formData,
+                          medication_name: suggestion.label,
+                          dosage: (suggestion as any).dosage || formData.dosage
+                        });
+                      }}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="indication">Indication</Label>
-                    <Input
-                      id="indication"
+                    <ConditionField
+                      name="indication"
+                      label="Indication"
+                      placeholder="Reason for prescription (e.g., Hypertension, Diabetes)"
                       value={formData.indication}
-                      onChange={(e) => setFormData({ ...formData, indication: e.target.value })}
-                      placeholder="Reason for prescription"
+                      onChange={(value) => setFormData({ ...formData, indication: value })}
                     />
                   </div>
                 </div>

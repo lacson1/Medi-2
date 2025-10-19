@@ -1,0 +1,431 @@
+/* Google Material Design 3.0 inspired styles for Patient Workspace */
+
+:root {
+    /* Google Material Design 3.0 Colors */
+    --md-sys-color-primary: #1a73e8;
+    --md-sys-color-primary-container: #d2e3fc;
+    --md-sys-color-secondary: #34a853;
+    --md-sys-color-secondary-container: #d1f2d1;
+    --md-sys-color-tertiary: #fbbc04;
+    --md-sys-color-tertiary-container: #fef7d6;
+    --md-sys-color-error: #ea4335;
+    --md-sys-color-error-container: #fce8e6;
+    --md-sys-color-surface: #ffffff;
+    --md-sys-color-surface-variant: #f8f9fa;
+    --md-sys-color-outline: #dadce0;
+    --md-sys-color-outline-variant: #e8eaed;
+    --md-sys-color-on-surface: #202124;
+    --md-sys-color-on-surface-variant: #5f6368;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-on-secondary: #ffffff;
+    --md-sys-color-on-tertiary: #202124;
+    --md-sys-color-on-error: #ffffff;
+    /* Typography */
+    --md-sys-typescale-headline-large-font: 'Google Sans', 'Roboto', sans-serif;
+    --md-sys-typescale-headline-large-size: 2rem;
+    --md-sys-typescale-headline-large-weight: 400;
+    --md-sys-typescale-headline-large-line-height: 2.5rem;
+    --md-sys-typescale-headline-medium-font: 'Google Sans', 'Roboto', sans-serif;
+    --md-sys-typescale-headline-medium-size: 1.75rem;
+    --md-sys-typescale-headline-medium-weight: 400;
+    --md-sys-typescale-headline-medium-line-height: 2.25rem;
+    --md-sys-typescale-title-large-font: 'Google Sans', 'Roboto', sans-serif;
+    --md-sys-typescale-title-large-size: 1.375rem;
+    --md-sys-typescale-title-large-weight: 400;
+    --md-sys-typescale-title-large-line-height: 1.75rem;
+    --md-sys-typescale-body-large-font: 'Roboto', sans-serif;
+    --md-sys-typescale-body-large-size: 1rem;
+    --md-sys-typescale-body-large-weight: 400;
+    --md-sys-typescale-body-large-line-height: 1.5rem;
+    --md-sys-typescale-body-medium-font: 'Roboto', sans-serif;
+    --md-sys-typescale-body-medium-size: 0.875rem;
+    --md-sys-typescale-body-medium-weight: 400;
+    --md-sys-typescale-body-medium-line-height: 1.25rem;
+    --md-sys-typescale-label-large-font: 'Roboto', sans-serif;
+    --md-sys-typescale-label-large-size: 0.875rem;
+    --md-sys-typescale-label-large-weight: 500;
+    --md-sys-typescale-label-large-line-height: 1.25rem;
+    --md-sys-typescale-label-medium-font: 'Roboto', sans-serif;
+    --md-sys-typescale-label-medium-size: 0.75rem;
+    --md-sys-typescale-label-medium-weight: 500;
+    --md-sys-typescale-label-medium-line-height: 1rem;
+    --md-sys-typescale-label-small-font: 'Roboto', sans-serif;
+    --md-sys-typescale-label-small-size: 0.6875rem;
+    --md-sys-typescale-label-small-weight: 500;
+    --md-sys-typescale-label-small-line-height: 0.875rem;
+    /* Elevation */
+    --md-sys-elevation-level0: none;
+    --md-sys-elevation-level1: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+    --md-sys-elevation-level2: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 2px 6px 2px rgba(60, 64, 67, 0.15);
+    --md-sys-elevation-level3: 0px 1px 3px 0px rgba(60, 64, 67, 0.3), 0px 4px 8px 3px rgba(60, 64, 67, 0.15);
+    --md-sys-elevation-level4: 0px 2px 3px 0px rgba(60, 64, 67, 0.3), 0px 6px 10px 4px rgba(60, 64, 67, 0.15);
+    --md-sys-elevation-level5: 0px 4px 4px 0px rgba(60, 64, 67, 0.3), 0px 8px 12px 6px rgba(60, 64, 67, 0.15);
+    /* Shape */
+    --md-sys-shape-corner-none: 0px;
+    --md-sys-shape-corner-extra-small: 4px;
+    --md-sys-shape-corner-small: 8px;
+    --md-sys-shape-corner-medium: 12px;
+    --md-sys-shape-corner-large: 16px;
+    --md-sys-shape-corner-extra-large: 28px;
+}
+
+
+/* Google Material Design 3.0 Components */
+
+.md-card {
+    background-color: var(--md-sys-color-surface);
+    border-radius: var(--md-sys-shape-corner-large);
+    box-shadow: var(--md-sys-elevation-level1);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.md-card:hover {
+    box-shadow: var(--md-sys-elevation-level2);
+}
+
+.md-card-elevated {
+    box-shadow: var(--md-sys-elevation-level2);
+}
+
+.md-card-elevated:hover {
+    box-shadow: var(--md-sys-elevation-level3);
+}
+
+.md-button {
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    border-radius: var(--md-sys-shape-corner-large);
+    padding: 10px 24px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.md-button-filled {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+}
+
+.md-button-filled:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 85%, black);
+    box-shadow: var(--md-sys-elevation-level1);
+}
+
+.md-button-outlined {
+    background-color: transparent;
+    color: var(--md-sys-color-primary);
+    border: 1px solid var(--md-sys-color-outline);
+}
+
+.md-button-outlined:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.md-button-text {
+    background-color: transparent;
+    color: var(--md-sys-color-primary);
+}
+
+.md-button-text:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.md-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    border-radius: var(--md-sys-shape-corner-large);
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    background-color: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface);
+    border: 1px solid var(--md-sys-color-outline);
+}
+
+.md-chip-filled {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary);
+    border: none;
+}
+
+.md-chip-outlined {
+    background-color: transparent;
+    color: var(--md-sys-color-primary);
+    border: 1px solid var(--md-sys-color-outline);
+}
+
+.md-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--md-sys-shape-corner-large);
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    background-color: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.md-tab:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-tab.active {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-primary);
+}
+
+.md-tab-bar {
+    display: flex;
+    background-color: var(--md-sys-color-surface-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+    padding: 4px;
+    gap: 4px;
+}
+
+.md-list-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-radius: var(--md-sys-shape-corner-medium);
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.md-list-item:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 4%, transparent);
+}
+
+.md-list-item:active {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.md-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.md-icon-button:hover {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.md-icon-button:active {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
+}
+
+.md-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-primary);
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--md-sys-elevation-level3);
+    transition: all 0.2s ease-in-out;
+}
+
+.md-fab:hover {
+    box-shadow: var(--md-sys-elevation-level4);
+    background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 85%, black);
+}
+
+.md-fab:active {
+    box-shadow: var(--md-sys-elevation-level2);
+}
+
+
+/* Typography Classes */
+
+.md-headline-large {
+    font-family: var(--md-sys-typescale-headline-large-font);
+    font-size: var(--md-sys-typescale-headline-large-size);
+    font-weight: var(--md-sys-typescale-headline-large-weight);
+    line-height: var(--md-sys-typescale-headline-large-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-headline-medium {
+    font-family: var(--md-sys-typescale-headline-medium-font);
+    font-size: var(--md-sys-typescale-headline-medium-size);
+    font-weight: var(--md-sys-typescale-headline-medium-weight);
+    line-height: var(--md-sys-typescale-headline-medium-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-title-large {
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-size: var(--md-sys-typescale-title-large-size);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-body-large {
+    font-family: var(--md-sys-typescale-body-large-font);
+    font-size: var(--md-sys-typescale-body-large-size);
+    font-weight: var(--md-sys-typescale-body-large-weight);
+    line-height: var(--md-sys-typescale-body-large-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-body-medium {
+    font-family: var(--md-sys-typescale-body-medium-font);
+    font-size: var(--md-sys-typescale-body-medium-size);
+    font-weight: var(--md-sys-typescale-body-medium-weight);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-label-large {
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-label-medium {
+    font-family: var(--md-sys-typescale-label-medium-font);
+    font-size: var(--md-sys-typescale-label-medium-size);
+    font-weight: var(--md-sys-typescale-label-medium-weight);
+    line-height: var(--md-sys-typescale-label-medium-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-label-small {
+    font-family: var(--md-sys-typescale-label-small-font);
+    font-size: var(--md-sys-typescale-label-small-size);
+    font-weight: var(--md-sys-typescale-label-small-weight);
+    line-height: var(--md-sys-typescale-label-small-line-height);
+    color: var(--md-sys-color-on-surface);
+}
+
+
+/* Utility Classes */
+
+.md-surface {
+    background-color: var(--md-sys-color-surface);
+}
+
+.md-surface-variant {
+    background-color: var(--md-sys-color-surface-variant);
+}
+
+.md-primary {
+    color: var(--md-sys-color-primary);
+}
+
+.md-secondary {
+    color: var(--md-sys-color-secondary);
+}
+
+.md-tertiary {
+    color: var(--md-sys-color-tertiary);
+}
+
+.md-error {
+    color: var(--md-sys-color-error);
+}
+
+.md-on-surface {
+    color: var(--md-sys-color-on-surface);
+}
+
+.md-on-surface-variant {
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .md-card {
+        border-radius: var(--md-sys-shape-corner-medium);
+    }
+    .md-button {
+        padding: 8px 16px;
+    }
+    .md-tab {
+        padding: 8px 16px;
+    }
+    .md-list-item {
+        padding: 12px;
+    }
+}
+
+
+/* Animation Classes */
+
+.md-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.md-ripple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.md-ripple:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+
+/* Focus States */
+
+.md-button:focus-visible,
+.md-tab:focus-visible,
+.md-icon-button:focus-visible,
+.md-fab:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+}
+
+
+/* Dark Mode Support */
+
+@media (prefers-color-scheme: dark) {
+     :root {
+        --md-sys-color-surface: #1c1c1e;
+        --md-sys-color-surface-variant: #2c2c2e;
+        --md-sys-color-outline: #38383a;
+        --md-sys-color-outline-variant: #48484a;
+        --md-sys-color-on-surface: #ffffff;
+        --md-sys-color-on-surface-variant: #ebebf5;
+    }
+}

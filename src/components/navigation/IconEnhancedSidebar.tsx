@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -57,6 +57,14 @@ const ENHANCED_NAVIGATION = {
                 category: 'navigation',
                 description: 'Virtual consultations',
                 badge: '2'
+            },
+            {
+                title: 'Consultations',
+                url: createPageUrl('ConsultationManagement'),
+                icon: 'consultations',
+                category: 'navigation',
+                description: 'Specialty consultations',
+                badge: '8'
             },
         ]
     },

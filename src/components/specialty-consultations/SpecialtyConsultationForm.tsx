@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { mockApiClient } from "@/api/mockApiClient";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,56 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import DynamicFormRenderer from "./DynamicFormRenderer";
 import TemplatePreview from "./TemplatePreview";
 import { Loader2, AlertCircle, CheckCircle, Search, Calendar, User, FileText, Clock, Eye } from "lucide-react";
 
-export default function SpecialtyConsultationForm({ consultation, patient, onSubmit, onCancel, isSubmitting }: any) {
+interface Patient {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
+
+interface ConsultationTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  template_schema: any;
+}
+
+interface Consultation {
+  id?: string;
+  specialist_id?: string;
+  template_id?: string;
+  consultation_date?: string;
+  summary?: string;
+  status?: string;
+  consultation_data?: any;
+}
+
+interface FormErrors {
+  specialist?: string;
+  template?: string;
+  consultationDate?: string;
+  summary?: string;
+}
+
+interface FormTouched {
+  specialist?: boolean;
+  template?: boolean;
+  consultationDate?: boolean;
+  summary?: boolean;
+}
+
+interface SpecialtyConsultationFormProps {
+  consultation?: Consultation;
+  patient: Patient | null;
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
+  isSubmitting: boolean;
+}
+
+export default function SpecialtyConsultationForm({ consultation, patient, onSubmit, onCancel, isSubmitting }: SpecialtyConsultationFormProps) {
   const [selectedSpecialistId, setSelectedSpecialistId] = useState(consultation?.specialist_id || "");
   const [selectedTemplateId, setSelectedTemplateId] = useState(consultation?.template_id || "");
   const [consultationDate, setConsultationDate] = useState(
@@ -23,14 +67,14 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
   const [summary, setSummary] = useState(consultation?.summary || "");
   const [status, setStatus] = useState(consultation?.status || "completed");
   const [consultationData, setConsultationData] = useState(consultation?.consultation_data || {});
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<ConsultationTemplate | null>(null);
 
   // Form validation state
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<FormTouched>({});
   const [specialistSearch, setSpecialistSearch] = useState("");
   const [templateSearch, setTemplateSearch] = useState("");
-  const [previewTemplate, setPreviewTemplate] = useState(null);
+  const [previewTemplate, setPreviewTemplate] = useState<ConsultationTemplate | null>(null);
 
   const { data: specialists = [] } = useQuery({
     queryKey: ['specialists'],
@@ -45,65 +89,46 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
   });
 
   // Filter specialists and templates based on search
-  const filteredSpecialists = specialists.filter(specialist =>
-    specialist.full_name.toLowerCase().includes(specialistSearch.toLowerCase()) ||
-    specialist.specialty.toLowerCase().includes(specialistSearch.toLowerCase())
+  const filteredSpecialists = specialists.filter((specialist: any) =>
+    specialist.full_name?.toLowerCase().includes(specialistSearch.toLowerCase()) ||
+    specialist.specialty?.toLowerCase().includes(specialistSearch.toLowerCase())
   );
 
-  const filteredTemplates = templates.filter(template =>
-    template.name.toLowerCase().includes(templateSearch.toLowerCase()) ||
+  const filteredTemplates = templates.filter((template: any) =>
+    template.name?.toLowerCase().includes(templateSearch.toLowerCase()) ||
     (template.description && template.description.toLowerCase().includes(templateSearch.toLowerCase()))
   );
 
-  // Validation functions
-  const validateField = (fieldName: any, value: any) => {
-    const newErrors = { ...errors };
-
+  // Validation functions - optimized to prevent infinite re-renders
+  const validateField = useCallback((fieldName: string, value: any) => {
     switch (fieldName) {
       case 'specialist':
-        if (!value) {
-          newErrors.specialist = 'Please select a specialist';
-        } else {
-          delete newErrors.specialist;
-        }
-        break;
+        return !value ? 'Please select a specialist' : null;
       case 'template':
-        if (!value) {
-          newErrors.template = 'Please select a consultation template';
-        } else {
-          delete newErrors.template;
-        }
-        break;
+        return !value ? 'Please select a consultation template' : null;
       case 'consultationDate':
-        if (!value) {
-          newErrors.consultationDate = 'Please select a consultation date and time';
-        } else if (new Date(value) < new Date()) {
-          newErrors.consultationDate = 'Consultation date cannot be in the past';
-        } else {
-          delete newErrors.consultationDate;
-        }
-        break;
+        if (!value) return 'Please select a consultation date and time';
+        if (new Date(value) < new Date()) return 'Consultation date cannot be in the past';
+        return null;
       case 'summary':
-        if (!value || value.trim().length < 10) {
-          newErrors.summary = 'Summary must be at least 10 characters long';
-        } else {
-          delete newErrors.summary;
-        }
-        break;
+        if (!value || value.trim().length < 10) return 'Summary must be at least 10 characters long';
+        return null;
       default:
-        break;
+        return null;
     }
+  }, []);
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleFieldBlur = (fieldName: any, value: any) => {
+  const handleFieldBlur = useCallback((fieldName: string, value: any) => {
     setTouched(prev => ({ ...prev, [fieldName]: true }));
-    validateField(fieldName, value);
-  };
+    const error = validateField(fieldName, value);
+    setErrors(prev => ({
+      ...prev,
+      [fieldName]: error || undefined
+    }));
+  }, [validateField]);
 
-  const isFormValid = () => {
+  // Memoized form validation to prevent infinite re-renders
+  const isFormValid = useMemo(() => {
     const requiredFields = {
       specialist: selectedSpecialistId,
       template: selectedTemplateId,
@@ -111,20 +136,16 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
       summary
     };
 
-    let isValid = true;
-    Object.entries(requiredFields).forEach(([field, value]) => {
-      if (!validateField(field, value)) {
-        isValid = false;
-      }
+    return Object.entries(requiredFields).every(([field, value]) => {
+      const error = validateField(field, value);
+      return !error;
     });
-
-    return isValid;
-  };
+  }, [selectedSpecialistId, selectedTemplateId, consultationDate, summary, validateField]);
 
   useEffect(() => {
     if (selectedTemplateId) {
-      const template = templates.find(t => t.id === selectedTemplateId);
-      setSelectedTemplate(template);
+      const template = templates.find((t: any) => t.id === selectedTemplateId) as ConsultationTemplate | undefined;
+      setSelectedTemplate(template || null);
     } else {
       setSelectedTemplate(null);
     }
@@ -133,7 +154,7 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isFormValid()) {
+    if (!isFormValid) {
       // Mark all fields as touched to show validation errors
       setTouched({
         specialist: true,
@@ -144,16 +165,16 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
       return;
     }
 
-    const specialist = specialists.find(s => s.id === selectedSpecialistId);
-    const template = templates.find(t => t.id === selectedTemplateId);
+    const specialist = specialists.find((s: any) => s.id === selectedSpecialistId);
+    const template = templates.find((t: any) => t.id === selectedTemplateId);
 
     const formData = {
-      patient_id: patient.id,
-      patient_name: `${patient.first_name} ${patient.last_name}`,
+      patient_id: patient?.id || null,
+      patient_name: patient ? `${patient.first_name} ${patient.last_name}` : 'Unknown Patient',
       specialist_id: selectedSpecialistId,
-      specialist_name: specialist?.full_name || "",
+      specialist_name: (specialist as any)?.full_name || "",
       template_id: selectedTemplateId,
-      template_name: template?.name || "",
+      template_name: (template as any)?.name || "",
       consultation_date: consultationDate,
       status,
       summary,
@@ -162,6 +183,29 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
 
     onSubmit(formData);
   };
+
+  // Guard against null patient - after all hooks
+  if (!patient) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <Card className="border-l-4 border-l-red-500">
+          <CardContent className="pt-6">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Patient information is not available. Please ensure a valid patient is selected.
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-end mt-4">
+              <Button type="button" variant="outline" onClick={onCancel}>
+                Close
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -180,9 +224,9 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">
-                {patient.first_name} {patient.last_name}
+                {patient?.first_name || 'Unknown'} {patient?.last_name || 'Patient'}
               </h3>
-              <p className="text-sm text-gray-600">Patient ID: {patient.id}</p>
+              <p className="text-sm text-gray-600">Patient ID: {patient?.id || 'N/A'}</p>
             </div>
           </div>
         </CardContent>
@@ -278,9 +322,8 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
                         setSelectedTemplateId(value);
                         handleFieldBlur('template', value);
                       }}
-                      className="flex-1"
                     >
-                      <SelectTrigger className={errors.template && touched.template ? "border-red-500" : ""}>
+                      <SelectTrigger className={`flex-1 ${errors.template && touched.template ? "border-red-500" : ""}`}>
                         <SelectValue placeholder="Select template" />
                       </SelectTrigger>
                       <SelectContent>
@@ -301,7 +344,7 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
                       variant="outline"
                       size="icon"
                       onClick={() => {
-                        const template = templates.find(t => t.id === selectedTemplateId);
+                        const template = templates.find((t: any) => t.id === selectedTemplateId) as ConsultationTemplate | undefined;
                         if (template) setPreviewTemplate(template);
                       }}
                       disabled={!selectedTemplateId}
@@ -383,16 +426,15 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
                 <FileText className="w-4 h-4" />
                 Summary / Chief Complaint *
               </Label>
-              <Textarea
-                required
+              <textarea
                 value={summary}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                   setSummary(e.target.value);
                   handleFieldBlur('summary', e.target.value);
                 }}
                 placeholder="Brief overview of the consultation..."
                 rows={3}
-                className={errors.summary && touched.summary ? "border-red-500" : ""}
+                className={`flex min-h-[80px] w-full rounded-lg border border-outline bg-surface px-3 py-2 input-text shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 ${errors.summary && touched.summary ? "border-red-500" : ""}`}
               />
               {errors.summary && touched.summary && (
                 <Alert variant="destructive" className="py-2">
@@ -451,7 +493,7 @@ export default function SpecialtyConsultationForm({ consultation, patient, onSub
               </Button>
               <Button
                 type="submit"
-                disabled={isSubmitting || !isFormValid()}
+                disabled={isSubmitting || !isFormValid}
                 className="min-w-[140px]"
               >
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

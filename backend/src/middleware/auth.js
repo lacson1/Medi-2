@@ -8,8 +8,12 @@ import { logger } from '../utils/logger.js';
 
 export const authenticateToken = async(req, res, next) => {
     try {
-        // Development mode bypass - allow requests without authentication
-        if (process.env.NODE_ENV === 'development' && !req.headers['authorization']) {
+        // CRITICAL: Remove development bypass for production security
+        // Only allow bypass in development mode AND when explicitly enabled via environment variable
+        if (process.env.NODE_ENV === 'development' &&
+            process.env.ALLOW_DEV_BYPASS === 'true' &&
+            !req.headers['authorization']) {
+            logger.warn('Development authentication bypass enabled - NOT FOR PRODUCTION');
             req.user = {
                 userId: 'dev-user-001',
                 email: 'dev@mediflow.com',
@@ -29,8 +33,18 @@ export const authenticateToken = async(req, res, next) => {
             });
         }
 
+        // Verify token with proper secret validation
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret || jwtSecret === 'fallback-secret') {
+            logger.error('JWT_SECRET not properly configured');
+            return res.status(500).json({
+                success: false,
+                message: 'Server configuration error'
+            });
+        }
+
         // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+        const decoded = jwt.verify(token, jwtSecret);
 
         // Check if user still exists and is active
         const userResult = await query(

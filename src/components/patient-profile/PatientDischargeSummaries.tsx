@@ -56,7 +56,7 @@ export default function PatientDischargeSummaries({ summaries, isLoading, onEdit
                   <div className="flex flex-wrap items-center gap-2 mb-3">
                     <Badge className={dispositionColors[summary.discharge_disposition]}>
                       <Home className="w-3 h-3 mr-1" />
-                      {summary.discharge_disposition.replace(/_/g, ' ')}
+                      {summary.discharge_disposition?.replace(/_/g, ' ') || summary.discharge_disposition || 'Unknown'}
                     </Badge>
                     <Badge className={conditionColors[summary.condition_at_discharge]}>
                       <TrendingUp className="w-3 h-3 mr-1" />
