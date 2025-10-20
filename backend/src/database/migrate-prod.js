@@ -25,7 +25,7 @@ const productionMigrations = [
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_by UUID,
-        CONSTRAINT org_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+        CONSTRAINT org_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$')
     )`,
 
     // Users table with enhanced security
@@ -51,7 +51,7 @@ const productionMigrations = [
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_by UUID,
-        CONSTRAINT user_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+        CONSTRAINT user_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$'),
         CONSTRAINT user_name_length CHECK (LENGTH(first_name) >= 2 AND LENGTH(last_name) >= 2)
     )`,
 
@@ -74,7 +74,7 @@ const productionMigrations = [
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_by UUID REFERENCES users(id),
-        CONSTRAINT patient_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+        CONSTRAINT patient_email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$'),
         CONSTRAINT patient_name_length CHECK (LENGTH(first_name) >= 2 AND LENGTH(last_name) >= 2)
     )`,
 
