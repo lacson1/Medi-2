@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from '@/App'
 import '@/index.css'
+import { logger } from '@/lib/logger'
 
 // Service Worker Management
 if ('serviceWorker' in navigator) {
@@ -10,9 +11,9 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then((registrations) => {
             registrations.forEach((registration) => {
                 registration.unregister().then(() => {
-                    console.log('Service worker unregistered for development');
+                    logger.info('Service worker unregistered for development');
                 }).catch((error) => {
-                    console.warn('Failed to unregister service worker:', error);
+                    logger.warn('Failed to unregister service worker', error);
                 });
             });
         });
@@ -22,9 +23,9 @@ if ('serviceWorker' in navigator) {
             caches.keys().then((cacheNames) => {
                 cacheNames.forEach((cacheName) => {
                     caches.delete(cacheName).then(() => {
-                        console.log(`Cache "${cacheName}" cleared`);
+                        logger.info(`Cache "${cacheName}" cleared`);
                     }).catch((error) => {
-                        console.warn(`Failed to clear cache "${cacheName}":`, error);
+                        logger.warn(`Failed to clear cache "${cacheName}"`, error);
                     });
                 });
             });
@@ -33,7 +34,7 @@ if ('serviceWorker' in navigator) {
         // Prevent any new service worker registration
         const originalRegister = navigator.serviceWorker.register;
         navigator.serviceWorker.register = () => {
-            console.log('Service worker registration blocked in development');
+            logger.info('Service worker registration blocked in development');
             return Promise.reject(new Error('Service worker disabled in development'));
         };
 
@@ -41,10 +42,10 @@ if ('serviceWorker' in navigator) {
         setTimeout(() => {
             navigator.serviceWorker.register('/sw-dev.js')
                 .then(() => {
-                    console.log('Development service worker registered (minimal functionality)');
+                    logger.info('Development service worker registered (minimal functionality)');
                 })
                 .catch(() => {
-                    console.log('No service worker needed in development');
+                    logger.info('No service worker needed in development');
                 });
         }, 1000);
     } else {
@@ -52,10 +53,10 @@ if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
                 .then((registration) => {
-                    console.log('SW registered: ', registration);
+                    logger.info('Service worker registered', registration);
                 })
                 .catch((registrationError) => {
-                    console.log('SW registration failed: ', registrationError);
+                    logger.error('Service worker registration failed', registrationError);
                 });
         });
     }

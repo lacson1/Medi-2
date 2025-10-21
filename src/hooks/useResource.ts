@@ -27,7 +27,7 @@ export function useResource<T>(resource: string, id?: string) {
 
     // Create mutation
     const createMutation = useMutation({
-        mutationFn: (data: any) => unifiedApiClient.create<T>(resource, data),
+        mutationFn: (data: Partial<T>) => unifiedApiClient.create<T>(resource, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [resource] });
         },
@@ -35,7 +35,7 @@ export function useResource<T>(resource: string, id?: string) {
 
     // Update mutation
     const updateMutation = useMutation({
-        mutationFn: ({ id, data }: { id: string; data: any }) =>
+        mutationFn: ({ id, data }: { id: string; data: Partial<T> }) =>
             unifiedApiClient.update<T>(resource, id, data),
         onSuccess: (_, { id }) => {
             queryClient.invalidateQueries({ queryKey: [resource] });
@@ -100,7 +100,7 @@ export function useResourceItem<T>(
 export function useResourceSearch<T>(
     resource: string,
     query: string,
-    filters?: Record<string, any>,
+    filters?: Record<string, string | number | boolean>,
     options?: {
         enabled?: boolean;
         staleTime?: number;
@@ -119,14 +119,14 @@ export function useResourceMutations<T>(resource: string) {
     const queryClient = useQueryClient();
 
     const createMutation = useMutation({
-        mutationFn: (data: any) => unifiedApiClient.create<T>(resource, data),
+        mutationFn: (data: Partial<T>) => unifiedApiClient.create<T>(resource, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [resource] });
         },
     });
 
     const updateMutation = useMutation({
-        mutationFn: ({ id, data }: { id: string; data: any }) =>
+        mutationFn: ({ id, data }: { id: string; data: Partial<T> }) =>
             unifiedApiClient.update<T>(resource, id, data),
         onSuccess: (_, { id }) => {
             queryClient.invalidateQueries({ queryKey: [resource] });
@@ -142,7 +142,7 @@ export function useResourceMutations<T>(resource: string) {
     });
 
     const bulkUpdateMutation = useMutation({
-        mutationFn: (updates: Array<{ id: string; data: any }>) =>
+        mutationFn: (updates: Array<{ id: string; data: Partial<T> }>) =>
             unifiedApiClient.bulkUpdate<T>(resource, updates),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [resource] });
@@ -237,7 +237,7 @@ export function useFileUpload(resource: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ file, additionalData }: { file: File; additionalData?: Record<string, any> }) =>
+        mutationFn: ({ file, additionalData }: { file: File; additionalData?: Record<string, unknown> }) =>
             unifiedApiClient.upload(resource, file, additionalData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [resource] });

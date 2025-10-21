@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import ErrorBoundary from '@/components/ErrorBoundary'
 // import { initializeMonitoring, PerformanceMonitor } from '@/lib/monitoring'
 import Loading from '@/components/Loading'
+import { logger } from '@/lib/logger'
 
 // Lazy load Pages component for better initial bundle size
 const Pages = lazy(() => import("@/pages/index.tsx"))
@@ -22,7 +23,7 @@ window.addEventListener('error', (event) => {
         const errorMessage = (event.error as Error).message;
         if (errorMessage && errorMessage.includes('Could not establish connection')) {
             // This is typically a browser extension error, not our app error
-            console.warn('Browser extension connection error (ignored):', errorMessage);
+            logger.warn('Browser extension connection error (ignored)', errorMessage);
             event.preventDefault(); // Prevent the error from being logged as an unhandled error
         }
     }
@@ -74,7 +75,7 @@ const AppContent = memo(function AppContent() {
     useEffect(() => {
         // Track app initialization
         // PerformanceMonitor.trackPageLoad('App');
-        console.log('App initialized');
+        logger.info('App initialized');
     }, []);
 
     return (
