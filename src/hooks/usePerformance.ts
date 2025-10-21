@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { PerformanceTracker } from '@/utils/performance';
+import { logger } from '@/lib/logger';
 
 // Hook for monitoring component performance
 export function usePerformanceMonitor(componentName: string) {
@@ -15,7 +16,7 @@ export function usePerformanceMonitor(componentName: string) {
             PerformanceTracker.end(`${componentName}-mount`);
 
             if (import.meta.env.DEV) {
-                console.log(`${componentName} mounted in ${mountDuration.toFixed(2)}ms`);
+                logger.info(`${componentName} mounted in ${mountDuration.toFixed(2)}ms`);
             }
         };
     }, [componentName]);
@@ -30,7 +31,7 @@ export function usePerformanceMonitor(componentName: string) {
             PerformanceTracker.end(`${componentName}-render`);
 
             if (import.meta.env.DEV && renderDuration > 16) {
-                console.warn(`${componentName} render took ${renderDuration.toFixed(2)}ms (slow)`);
+                logger.warn(`${componentName} render took ${renderDuration.toFixed(2)}ms (slow)`);
             }
         }
     }, [componentName]);
@@ -72,12 +73,12 @@ export function useMemoryMonitor() {
                 const limitMB = memory.jsHeapSizeLimit / 1024 / 1024;
 
                 if (import.meta.env.DEV) {
-                    console.log(`Memory usage: ${usedMB.toFixed(2)}MB / ${totalMB.toFixed(2)}MB (limit: ${limitMB.toFixed(2)}MB)`);
+                    logger.info(`Memory usage: ${usedMB.toFixed(2)}MB / ${totalMB.toFixed(2)}MB (limit: ${limitMB.toFixed(2)}MB)`);
                 }
 
                 // Warn if memory usage is high
                 if (usedMB / limitMB > 0.8) {
-                    console.warn('High memory usage detected:', {
+                    logger.warn('High memory usage detected:', {
                         used: `${usedMB.toFixed(2)}MB`,
                         limit: `${limitMB.toFixed(2)}MB`,
                         percentage: `${((usedMB / limitMB) * 100).toFixed(1)}%`
@@ -100,7 +101,7 @@ export function useBundleMonitor() {
             // Log when components are loaded
             const originalImport = window.__webpack_require__ || window.require;
             if (originalImport) {
-                console.log('Bundle monitoring enabled');
+                logger.info('Bundle monitoring enabled');
             }
         }
     }, []);
@@ -115,7 +116,7 @@ export function useNetworkMonitor() {
         if (connection) {
             const logConnectionInfo = () => {
                 if (import.meta.env.DEV) {
-                    console.log('Network connection:', {
+                    logger.info('Network connection:', {
                         effectiveType: connection.effectiveType,
                         downlink: `${connection.downlink}Mbps`,
                         rtt: `${connection.rtt}ms`,
@@ -142,7 +143,7 @@ export function useWebVitalsMonitor() {
                 const lastEntry = entries[entries.length - 1];
 
                 if (import.meta.env.DEV) {
-                    console.log('LCP:', lastEntry.startTime.toFixed(2) + 'ms');
+                    logger.info('LCP:', lastEntry.startTime.toFixed(2) + 'ms');
                 }
             });
 
@@ -153,7 +154,7 @@ export function useWebVitalsMonitor() {
                 const entries = list.getEntries();
                 entries.forEach((entry) => {
                     if (import.meta.env.DEV) {
-                        console.log('FID:', entry.processingStart - entry.startTime + 'ms');
+                        logger.info('FID:', entry.processingStart - entry.startTime + 'ms');
                     }
                 });
             });
@@ -171,7 +172,7 @@ export function useWebVitalsMonitor() {
                 });
 
                 if (import.meta.env.DEV) {
-                    console.log('CLS:', clsValue.toFixed(4));
+                    logger.info('CLS:', clsValue.toFixed(4));
                 }
             });
 

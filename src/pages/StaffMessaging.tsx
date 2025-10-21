@@ -110,7 +110,7 @@ export default function StaffMessages() {
     mutationFn: async (messageData) => {
       return mockApiClient.entities.StaffMessage.create(messageData);
     },
-    onSuccess: (newMessage: any) => {
+    onSuccess: (newMessage: Record<string, unknown>) => {
       setMessages(prev => [...prev, newMessage]);
       setNewMessage('');
     }
@@ -235,18 +235,18 @@ export default function StaffMessages() {
     }
   };
 
-  const handleRemoveAttachment = (index: any) => {
+  const handleRemoveAttachment = (index: number) => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const filteredMessages = messages.filter(message => {
     const matchesSearch = message.content.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === 'all' || message.message_type === filterType;
-    
+
     return matchesSearch && matchesType;
   });
 
-  const getMessageIcon = (messageType: any) => {
+  const getMessageIcon = (messageType: string) => {
     switch (messageType) {
       case 'video':
         return <Video className="h-4 w-4" />;
@@ -259,21 +259,21 @@ export default function StaffMessages() {
     }
   };
 
-  const getMessageStatus = (message: any) => {
+  const getMessageStatus = (message: Record<string, unknown>) => {
     if (message.read_at) {
       return <CheckCircle className="h-4 w-4 text-blue-500" />;
     }
     return <Clock className="h-4 w-4 text-gray-400" />;
   };
 
-  const formatMessageTime = (timestamp: any) => {
-    return new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
+  const formatMessageTime = (timestamp: string | Date) => {
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: '2-digit',
       minute: '2-digit' 
     });
   };
 
-  const getUserName = (userId: any) => {
+  const getUserName = (userId: string) => {
     const userData = users.find(u => u.id === userId);
     return userData ? `${userData.firstName} ${userData.lastName}` : 'Unknown User';
   };
@@ -319,12 +319,12 @@ export default function StaffMessages() {
                     <Skeleton key={i} className="h-16 w-full" />
                   ))
                 ) : (
-                  users.map((userData: any) => (
+                  users.map((userData: Record<string, unknown>) => (
                     <div
-                      key={userData.id}
+                      key={userData.id as string}
                       className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                        selectedUser?.id === userData.id 
-                          ? 'bg-blue-50 border border-blue-200' 
+                        selectedUser?.id === userData.id
+                          ? 'bg-blue-50 border border-blue-200'
                           : 'hover:bg-gray-50'
                       }`}
                       onClick={() => setSelectedUser(userData)}
@@ -449,24 +449,24 @@ export default function StaffMessages() {
                       ))
                     ) : (
                       filteredMessages
-                        .filter(msg => 
+                        .filter(msg =>
                           (msg.sender_id === user?.id && msg.recipient_id === selectedUser.id) ||
                           (msg.sender_id === selectedUser.id && msg.recipient_id === user?.id)
                         )
-                        .map((message: any) => (
+                        .map((message: Record<string, unknown>) => (
                           <div
-                            key={message.id}
+                            key={message.id as string}
                             className={`flex ${message.sender_id === user?.id ? 'justify-end' : 'justify-start'}`}
                           >
                             <div className={`max-w-xs p-3 rounded-lg ${
-                              message.sender_id === user?.id 
-                                ? 'bg-blue-500 text-white' 
+                              message.sender_id === user?.id
+                                ? 'bg-blue-500 text-white'
                                 : 'bg-gray-200 text-gray-900'
                             }`}>
                               <div className="flex items-center gap-2 mb-1">
-                                {getMessageIcon(message.message_type)}
+                                {getMessageIcon(message.message_type as string)}
                                 <span className="text-xs">
-                                  {getUserName(message.sender_id)}
+                                  {getUserName(message.sender_id as string)}
                                 </span>
                               </div>
                               <div className="text-sm">{message.content}</div>

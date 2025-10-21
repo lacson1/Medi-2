@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '../api/apiClient';
 import { ErrorLogger } from '@/lib/monitoring';
+import { logger } from '@/lib/logger';
 import type {
     Patient,
     Appointment,
@@ -17,6 +18,25 @@ import type {
     BatchOperation
 } from '@/types';
 
+// Toast notification interface
+interface ToastOptions {
+    title: string;
+    description?: string;
+    variant?: 'default' | 'destructive';
+    duration?: number;
+}
+
+// Toast function type
+type ToastFunction = (options: ToastOptions) => void;
+
+// Batch operation result interface
+interface BatchOperationResult {
+    success: boolean;
+    operation: BatchOperation;
+    data?: unknown;
+    error?: Error;
+}
+
 // Default query options
 const defaultQueryOptions = {
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -27,7 +47,7 @@ const defaultQueryOptions = {
 };
 
 // Enhanced error handler for mutations
-const handleMutationError = (error: Error, toast: any): void => {
+const handleMutationError = (error: Error, toast: ToastFunction): void => {
     // Log error for monitoring
     ErrorLogger.log(error, {
         tags: {
@@ -67,8 +87,7 @@ export const usePatient = (id: string, options: GetOptions = {}) => {
 
 export const useCreatePatient = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (data: unknown) => api.patients.create(data),
@@ -86,8 +105,7 @@ export const useCreatePatient = () => {
 
 export const useUpdatePatient = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: unknown }) => api.patients.update(id, data),
@@ -106,8 +124,7 @@ export const useUpdatePatient = () => {
 
 export const useDeletePatient = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (id: string) => api.patients.delete(id),
@@ -145,8 +162,7 @@ export const useAppointment = (id: string, options: GetOptions = {}) => {
 
 export const useCreateAppointment = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (data: unknown) => api.appointments.create(data),
@@ -164,8 +180,7 @@ export const useCreateAppointment = () => {
 
 export const useUpdateAppointment = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: unknown }) => api.appointments.update(id, data),
@@ -184,8 +199,7 @@ export const useUpdateAppointment = () => {
 
 export const useDeleteAppointment = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (id: string) => api.appointments.delete(id),
@@ -223,8 +237,7 @@ export const useUser = (id: string, options: GetOptions = {}) => {
 
 export const useCreateUser = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (data: unknown) => api.users.create(data),
@@ -242,8 +255,7 @@ export const useCreateUser = () => {
 
 export const useUpdateUser = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: unknown }) => api.users.update(id, data),
@@ -262,8 +274,7 @@ export const useUpdateUser = () => {
 
 export const useDeleteUser = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (id: string) => api.users.delete(id),
@@ -301,8 +312,7 @@ export const useOrganization = (id: string, options: GetOptions = {}) => {
 
 export const useCreateOrganization = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (data: unknown) => api.organizations.create(data),
@@ -320,8 +330,7 @@ export const useCreateOrganization = () => {
 
 export const useUpdateOrganization = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: unknown }) => api.organizations.update(id, data),
@@ -340,8 +349,7 @@ export const useUpdateOrganization = () => {
 
 export const useDeleteOrganization = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
         mutationFn: (id: string) => api.organizations.delete(id),
@@ -360,19 +368,19 @@ export const useDeleteOrganization = () => {
 // Batch operations hook
 export const useBatchOperation = () => {
     const queryClient = useQueryClient();
-    const toast = (options: { title: string; description: string; variant?: string; duration?: number }) =>
-        console.log('Toast:', options);
+    const toast: ToastFunction = (options) => logger.info('Toast notification', options);
 
     return useMutation({
-        mutationFn: ({ operations, options }: { operations: BatchOperation[]; options?: any }) => api.batch(operations, options),
-        onSuccess: (results: any) => {
+        mutationFn: ({ operations, options }: { operations: BatchOperation[]; options?: Record<string, unknown> }) =>
+            api.batch(operations, options),
+        onSuccess: (results: BatchOperationResult[]) => {
             // Invalidate all related queries
-            const entityTypes = [...new Set(results.map((r: any) => r.operation.entityType))];
-            entityTypes.forEach((entityType: unknown) => {
-                queryClient.invalidateQueries({ queryKey: [(entityType as EntityType).toLowerCase() + 's'] });
+            const entityTypes = [...new Set(results.map((r) => r.operation.entityType))];
+            entityTypes.forEach((entityType: EntityType) => {
+                queryClient.invalidateQueries({ queryKey: [entityType.toLowerCase() + 's'] });
             });
 
-            const successCount = results.filter((r: any) => r.success).length;
+            const successCount = results.filter((r) => r.success).length;
             const totalCount = results.length;
 
             toast({
@@ -424,7 +432,7 @@ export const useInfiniteAppointments = (options: ListOptions = {}) => {
 };
 
 // Health check hook
-export const useApiHealth = (options: any = {}) => {
+export const useApiHealth = (options: GetOptions = {}) => {
     return useQuery({
         queryKey: ['api-health'],
         queryFn: () => api.health(),

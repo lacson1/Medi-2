@@ -1,9 +1,12 @@
 /**
- * Security utilities for Bluequee2 application
+ * Security utilities for MEDI 2 application
  * Provides input sanitization, CSRF protection, and security best practices
+ *
+ * @module security
  */
 
 import DOMPurify from 'dompurify';
+import { logger } from '@/lib/logger';
 
 // File validation interfaces
 export interface FileValidationResult {
@@ -23,9 +26,24 @@ export interface FileMaxSizes {
     medical: number;
 }
 
-// Input sanitization utilities
+/**
+ * Input sanitization utilities
+ * Provides various sanitization methods for different input types
+ */
 export const sanitizer = {
-    // Sanitize HTML content
+    /**
+     * Sanitize HTML content while allowing safe formatting tags
+     * Uses DOMPurify to remove dangerous HTML/JavaScript
+     *
+     * @param html - Raw HTML string to sanitize
+     * @returns Sanitized HTML with only safe tags
+     *
+     * @example
+     * ```typescript
+     * const safe = sanitizer.sanitizeHtml('<p>Safe</p><script>Bad</script>');
+     * // Returns: '<p>Safe</p>'
+     * ```
+     */
     sanitizeHtml: (html: string): string => {
         return DOMPurify.sanitize(html, {
             ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],
@@ -33,7 +51,18 @@ export const sanitizer = {
         });
     },
 
-    // Sanitize text input
+    /**
+     * Sanitize plain text input by removing HTML tags, scripts, and event handlers
+     *
+     * @param text - Raw text input to sanitize
+     * @returns Sanitized text safe for display
+     *
+     * @example
+     * ```typescript
+     * const safe = sanitizer.sanitizeText('<script>alert(1)</script>');
+     * // Returns: 'scriptalert(1)/script' (tags removed)
+     * ```
+     */
     sanitizeText: (text: unknown): string => {
         if (typeof text !== 'string') return '';
         return text
@@ -43,7 +72,18 @@ export const sanitizer = {
             .trim();
     },
 
-    // Sanitize file name
+    /**
+     * Sanitize file names to prevent directory traversal and injection attacks
+     *
+     * @param fileName - Original file name
+     * @returns Sanitized file name with special characters replaced
+     *
+     * @example
+     * ```typescript
+     * const safe = sanitizer.sanitizeFileName('../../../etc/passwd');
+     * // Returns: '______etc_passwd'
+     * ```
+     */
     sanitizeFileName: (fileName: unknown): string => {
         if (typeof fileName !== 'string') return '';
         return fileName
@@ -53,7 +93,20 @@ export const sanitizer = {
             .substring(0, 255); // Limit length
     },
 
-    // Sanitize URL
+    /**
+     * Sanitize and validate URLs to prevent protocol injection attacks
+     * Only allows HTTP and HTTPS protocols
+     *
+     * @param url - URL string to sanitize
+     * @returns Valid HTTP/HTTPS URL or empty string
+     *
+     * @example
+     * ```typescript
+     * sanitizer.sanitizeUrl('https://example.com'); // OK
+     * sanitizer.sanitizeUrl('javascript:alert(1)'); // Returns ''
+     * sanitizer.sanitizeUrl('file:///etc/passwd');  // Returns ''
+     * ```
+     */
     sanitizeUrl: (url: unknown): string => {
         if (typeof url !== 'string') return '';
 
@@ -69,7 +122,19 @@ export const sanitizer = {
         }
     },
 
-    // Sanitize email
+    /**
+     * Sanitize and validate email addresses
+     * Converts to lowercase and validates format
+     *
+     * @param email - Email address to sanitize
+     * @returns Valid email address or empty string
+     *
+     * @example
+     * ```typescript
+     * sanitizer.sanitizeEmail('User@Example.COM'); // Returns 'user@example.com'
+     * sanitizer.sanitizeEmail('not-an-email');     // Returns ''
+     * ```
+     */
     sanitizeEmail: (email: unknown): string => {
         if (typeof email !== 'string') return '';
         const sanitized = email.trim().toLowerCase();
@@ -77,16 +142,42 @@ export const sanitizer = {
         return emailRegex.test(sanitized) ? sanitized : '';
     },
 
-    // Sanitize phone number
+    /**
+     * Sanitize phone numbers by removing invalid characters
+     * Allows digits, +, -, (), and spaces
+     *
+     * @param phone - Phone number to sanitize
+     * @returns Sanitized phone number
+     *
+     * @example
+     * ```typescript
+     * sanitizer.sanitizePhone('(123) 456-7890'); // Returns '(123) 456-7890'
+     * sanitizer.sanitizePhone('123-ABC-7890');   // Returns '123--7890'
+     * ```
+     */
     sanitizePhone: (phone: unknown): string => {
         if (typeof phone !== 'string') return '';
         return phone.replace(/[^\d+\-()\s]/g, '').trim();
     }
 };
 
-// CSRF protection utilities
+/**
+ * CSRF (Cross-Site Request Forgery) protection utilities
+ * Provides token generation, storage, and validation
+ */
 export const csrfProtection = {
-    // Generate CSRF token
+    /**
+     * Generate a cryptographically secure CSRF token
+     * Uses crypto.getRandomValues for strong randomness
+     *
+     * @returns 64-character hexadecimal CSRF token
+     *
+     * @example
+     * ```typescript
+     * const token = csrfProtection.generateToken();
+     * // Returns: 'a3f2c1...64chars...'
+     * ```
+     */
     generateToken: (): string => {
         const array = new Uint8Array(32);
         crypto.getRandomValues(array);
@@ -374,7 +465,7 @@ export const securityHeaders = {
         const missingHeaders = requiredHeaders.filter(header => !headers[header]);
 
         if (missingHeaders.length > 0) {
-            console.warn('Missing security headers:', missingHeaders);
+            logger.warn('Missing security headers', missingHeaders);
         }
 
         return missingHeaders.length === 0;
@@ -398,7 +489,7 @@ export const initSecurity = (): void => {
     }
 
     // Log security initialization
-    console.log('🔒 Security features initialized');
+    logger.info('Security features initialized');
 };
 
 export default {
