@@ -87,7 +87,7 @@ export default function LabOrders() {
 
   // Lab order mutations
   const labOrderMutation = useMutation({
-    mutationFn: (data: any) =>
+    mutationFn: (data: Partial<Record<string, unknown>> & { id?: string }) =>
       data.id ? mockApiClient.entities.LabOrder.update(data.id, data) : mockApiClient.entities.LabOrder.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['labOrders'] });
@@ -176,7 +176,7 @@ export default function LabOrders() {
     });
   }, [labOrders, filters]);
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = (data: Partial<Record<string, unknown>> & { id?: string }) => {
     labOrderMutation.mutate(data);
   };
 
@@ -193,7 +193,7 @@ export default function LabOrders() {
     setIsUploadModalOpen(false);
   };
 
-  const openAddResultModal = (testName: any) => {
+  const openAddResultModal = (testName: string) => {
     setSelectedTestName(testName);
     setIsAddResultModalOpen(true);
   };
@@ -203,7 +203,7 @@ export default function LabOrders() {
     setSelectedTestName('');
   };
 
-  const openPrintModal = (order: any) => {
+  const openPrintModal = (order: Record<string, unknown>) => {
     setSelectedLabOrder(order);
     setIsPrintModalOpen(true);
   };
@@ -222,8 +222,8 @@ export default function LabOrders() {
     console.log('Download lab report as PDF');
   };
 
-  const getStatusConfig = (status: any) => {
-    const configs = {
+  const getStatusConfig = (status: string) => {
+    const configs: Record<string, { icon: typeof Clock; color: string; label: string }> = {
       requested: { icon: Clock, color: 'bg-blue-100 text-blue-800', label: 'Requested' },
       ordered: { icon: FileText, color: 'bg-gray-100 text-gray-800', label: 'Ordered' },
       pending: { icon: Clock, color: 'bg-yellow-100 text-yellow-800', label: 'Pending' },
@@ -236,8 +236,8 @@ export default function LabOrders() {
     return configs[status] || configs.ordered;
   };
 
-  const getPriorityConfig = (priority: any) => {
-    const configs = {
+  const getPriorityConfig = (priority: string) => {
+    const configs: Record<string, { color: string; label: string }> = {
       low: { color: 'bg-gray-100 text-gray-800', label: 'Low' },
       routine: { color: 'bg-blue-100 text-blue-800', label: 'Routine' },
       urgent: { color: 'bg-red-100 text-red-800', label: 'Urgent' },
@@ -246,7 +246,7 @@ export default function LabOrders() {
     return configs[priority] || configs.routine;
   };
 
-  const getTestCategoryConfig = (category: any) => {
+  const getTestCategoryConfig = (category: keyof typeof TEST_CATEGORIES) => {
     return TEST_CATEGORIES[category] || TEST_CATEGORIES.other;
   };
 
@@ -506,10 +506,10 @@ export default function LabOrders() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {filteredLabOrders.map((order: any) => {
-                    const statusConfig = getStatusConfig(order.status);
-                    const priorityConfig = getPriorityConfig(order.priority);
-                    const categoryConfig = getTestCategoryConfig(order.test_category);
+                  {filteredLabOrders.map((order: Record<string, unknown>) => {
+                    const statusConfig = getStatusConfig(order.status as string);
+                    const priorityConfig = getPriorityConfig(order.priority as string);
+                    const categoryConfig = getTestCategoryConfig(order.test_category as keyof typeof TEST_CATEGORIES);
                     const patient = patients?.find(p => p.id === order.patient_id);
 
                     return (
