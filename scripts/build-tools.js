@@ -140,7 +140,7 @@ function build(environment = 'production') {
 
         // Run build
         logInfo('Running Vite build...');
-        execSync('npm run build', {
+        execSync('npx vite build', {
             stdio: 'inherit',
             cwd: projectRoot,
             env: {...process.env, NODE_ENV: config.env }

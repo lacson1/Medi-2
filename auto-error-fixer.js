@@ -18,32 +18,34 @@ class AutoErrorFixer {
     }
 
     // API endpoint to receive error reports
-    app.post('/api/error-report', (req, res) => {
-        const { errorType, data, timestamp, url, userAgent } = req.body;
+    setupRoutes(app) {
+        app.post('/api/error-report', (req, res) => {
+            const { errorType, data, timestamp, url, userAgent } = req.body;
 
-        console.log(`🚨 Error reported: ${errorType} at ${timestamp}`);
-        console.log(`URL: ${url}`);
-        console.log(`Data:`, data);
+            console.log(`🚨 Error reported: ${errorType} at ${timestamp}`);
+            console.log(`URL: ${url}`);
+            console.log(`Data:`, data);
 
-        // Store error in history
-        this.errorHistory.push({
-            errorType,
-            data,
-            timestamp,
-            url,
-            userAgent
+            // Store error in history
+            this.errorHistory.push({
+                errorType,
+                data,
+                timestamp,
+                url,
+                userAgent
+            });
+
+            // Attempt to fix the error
+            const fixResult = this.attemptFix(errorType, data);
+
+            res.json({
+                success: true,
+                fixApplied: fixResult.success,
+                message: fixResult.message,
+                suggestions: data.suggestions || []
+            });
         });
-
-        // Attempt to fix the error
-        const fixResult = this.attemptFix(errorType, data);
-
-        res.json({
-            success: true,
-            fixApplied: fixResult.success,
-            message: fixResult.message,
-            suggestions: data.suggestions || []
-        });
-    });
+    }
 
     attemptFix(errorType, data) {
         const fixer = this.fixPatterns[errorType];

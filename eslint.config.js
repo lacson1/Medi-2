@@ -7,7 +7,7 @@ import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 
 export default [
-    { ignores: ['dist', 'coverage', 'test-results', 'node_modules'] },
+    { ignores: ['dist', 'coverage', 'test-results', 'node_modules', 'auto-error-fixer.js'] },
     {
         files: ['backend/**/*.{js,jsx}'],
         languageOptions: {
