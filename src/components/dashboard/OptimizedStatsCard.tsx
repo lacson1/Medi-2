@@ -1,10 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertTriangle, RefreshCw, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { AlertTriangle, RefreshCw, TrendingUp, TrendingDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 interface OptimizedStatsCardProps {
@@ -112,11 +110,8 @@ export default function OptimizedStatsCard({
 
     if (isLoading) {
         return (
-            <Card className={cn(
-                'relative overflow-hidden border-none shadow-lg',
-                priority === 'high' && 'ring-2 ring-blue-100'
-            )}>
-                <CardContent className={cn(compact ? 'p-4' : 'p-6')}>
+            <Card className="border border-gray-200 bg-white">
+                <CardContent className={cn(compact ? 'p-4' : 'p-5')}>
                     <Skeleton className={cn(compact ? 'h-16' : 'h-20', 'w-full')} />
                 </CardContent>
             </Card>
@@ -125,42 +120,36 @@ export default function OptimizedStatsCard({
 
     if (hasError) {
         return (
-            <Card className="relative overflow-hidden border-none shadow-lg border-red-200 bg-red-50">
-                <CardContent className={cn(compact ? 'p-4' : 'p-6')}>
+            <Card className="border border-red-200 bg-red-50">
+                <CardContent className={cn(compact ? 'p-4' : 'p-5')}>
                     <div className="flex items-start justify-between">
                         <div className="flex-1">
                             <p className={cn(
-                                'font-medium text-red-600 mb-1',
-                                compact ? 'text-xs' : 'text-sm'
+                                'text-xs font-medium text-red-600 mb-1 uppercase tracking-wide',
+                                compact ? 'text-xs' : 'text-xs'
                             )}>
                                 {title}
                             </p>
                             <div className="flex items-center gap-2 mb-2">
                                 <AlertTriangle className="w-4 h-4 text-red-500" />
-                                <span className={cn(
-                                    'text-red-600',
-                                    compact ? 'text-xs' : 'text-sm'
-                                )}>
+                                <span className="text-sm text-red-600">
                                     Failed to load
                                 </span>
                             </div>
                             {onRetry && !compact && (
                                 <Button
                                     size="sm"
-                                    variant="outline"
+                                    variant="ghost"
                                     onClick={onRetry}
-                                    className="text-xs"
+                                    className="text-xs text-red-600 hover:text-red-700"
                                 >
-                                    <RefreshCw className="w-3 h-3 mr-1" />
+                                    Hamas <RefreshCw className="w-3 h-3 mr-1" />
                                     Retry
                                 </Button>
                             )}
                         </div>
-                        <div className={cn(
-                            'rounded-xl bg-red-100',
-                            compact ? 'p-2' : 'p-3'
-                        )}>
-                            <Icon className={cn('text-red-600', compact ? 'w-4 h-4' : 'w-6 h-6')} />
+                        <div className="rounded-lg bg-red-100 p-2.5">
+                            <Icon className={cn('text-red-600', compact ? 'w-4 h-4' : 'w-5 h-5')} />
                         </div>
                     </div>
                 </CardContent>
@@ -205,103 +194,67 @@ export default function OptimizedStatsCard({
         }
     };
 
+    // Clean icon color mapping - professional medical palette
+    const getIconColor = () => {
+        if (status === 'critical') return 'bg-red-50 text-red-600';
+        if (status === 'warning') return 'bg-amber-50 text-amber-600';
+        return 'bg-gray-50 text-gray-600';
+    };
+
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-        >
-            <Card className={cn(
-                'relative overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300',
-                priority === 'high' && 'ring-2 ring-blue-100',
-                status === 'critical' && 'border-l-4 border-l-red-500',
-                status === 'warning' && 'border-l-4 border-l-yellow-500',
-                getBackgroundColor(status)
-            )}>
-                {/* Background decoration - minimized for compact mode */}
-                {!compact && (
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${gradient} opacity-10 rounded-full transform translate-x-12 -translate-y-12`} />
-                )}
-
-                <CardContent className={cn(compact ? 'p-4' : 'p-6')}>
-                    <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                            {/* Title with status indicator */}
-                            <div className="flex items-center gap-2 mb-1">
-                                <p className={cn(
-                                    'font-medium text-gray-600',
-                                    compact ? 'text-xs' : 'text-sm'
-                                )}>
-                                    {title}
-                                </p>
-                                {getStatusIndicator()}
-                            </div>
-
-                            {/* Main value - emphasized with color coding */}
-                            <h3 className={cn(
-                                'font-bold mb-1',
-                                compact ? 'text-xl' : 'text-3xl',
-                                priority === 'high' && 'text-blue-900',
-                                getValueColor(value, valueType, thresholds)
-                            )}>
-                                {value}
-                            </h3>
-
-                            {/* Trend information - only if showDetails is true */}
-                            {showDetails && trend && (
-                                <div className="flex items-center gap-1 mb-1">
-                                    {getTrendIcon()}
-                                    <span className={cn(
-                                        'font-medium',
-                                        compact ? 'text-xs' : 'text-sm',
-                                        getTrendColor()
-                                    )}>
-                                        {trend.value > 0 ? '+' : ''}{trend.value}%
-                                    </span>
-                                    <span className={cn(
-                                        'text-gray-500',
-                                        compact ? 'text-xs' : 'text-sm'
-                                    )}>
-                                        {trend.label}
-                                    </span>
-                                </div>
-                            )}
-
-                            {/* Subtitle - minimized */}
-                            {subtitle && showDetails && (
-                                <p className={cn(
-                                    'text-gray-500',
-                                    compact ? 'text-xs' : 'text-xs'
-                                )}>
-                                    {subtitle}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Icon - size based on compact mode */}
-                        <div className={cn(
-                            'rounded-xl bg-gradient-to-br shadow-lg',
-                            gradient,
-                            compact ? 'p-2' : 'p-3'
+        <Card className={cn(
+            'border border-gray-200 bg-white hover:border-gray-300 transition-colors',
+            status === 'critical' && 'border-l-4 border-l-red-500',
+            status === 'warning' && 'border-l-4 border-l-amber-500'
+        )}>
+            <CardContent className={cn(compact ? 'p-4' : 'p-5')}>
+                <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                        {/* Title - clean and minimal */}
+                        <p className={cn(
+                            'text-xs font-medium text-gray-500 uppercase tracking-wide mb-2',
+                            compact ? 'text-xs' : 'text-xs'
                         )}>
-                            <Icon className={cn('text-white', compact ? 'w-4 h-4' : 'w-6 h-6')} />
-                        </div>
+                            {title}
+                        </p>
+
+                        {/* Main value - prominent and readable */}
+                        <h3 className={cn(
+                            'font-semibold text-gray-900 mb-1',
+                            compact ? 'text-xl' : 'text-2xl',
+                            getValueColor(value, valueType, thresholds)
+                        )}>
+                            {value}
+                        </h3>
+
+                        {/* Trend - subtle, only if showDetails is true */}
+                        {showDetails && trend && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                                {getTrendIcon()}
+                                <span className={cn(
+                                    'text-xs font-medium',
+                                    getTrendColor()
+                                )}>
+                                    {trend.value > 0 ? '+' : ''}{trend.value}%
+                                </span>
+                                <span className="text-xs text-gray-400">
+                                    {trend.label}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Additional info for high priority cards */}
-                    {priority === 'high' && showDetails && (
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                            <div className="flex items-center justify-between text-xs text-gray-500">
-                                <span>Last updated: {new Date().toLocaleTimeString()}</span>
-                                <Badge variant="outline" className="text-xs">
-                                    High Priority
-                                </Badge>
-                            </div>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
-        </motion.div>
+                    {/* Icon - minimal solid background */}
+                    <div className={cn(
+                        'rounded-lg',
+                        getIconColor(),
+                        compact ? 'p-2' : 'p-2.5'
+                    )}>
+                        <Icon className={cn(compact ? 'w-4 h-4' : 'w-5 h-5')} />
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
 

@@ -116,31 +116,39 @@ function startDevServer() {
     process.env.VITE_ENABLE_DEBUG_MODE = 'true';
 
     try {
-        // Start the dev server
-        const devProcess = spawn('npm', ['run', 'dev'], {
+        // Start frontend (Vite)
+        const frontend = spawn('npx', ['--yes', 'vite'], {
             stdio: 'inherit',
             cwd: projectRoot,
             shell: true,
-            env: {...process.env }
+            env: { ...process.env }
         });
 
-        // Handle process events
-        devProcess.on('error', (error) => {
-            logError(`Failed to start dev server: ${error.message}`);
+        // Start backend (nodemon)
+        const backend = spawn('npm', ['run', 'dev'], {
+            stdio: 'inherit',
+            cwd: join(projectRoot, 'backend'),
+            shell: true,
+            env: { ...process.env }
         });
 
-        devProcess.on('exit', (code) => {
-            if (code !== 0) {
-                logError(`Dev server exited with code ${code}`);
-            }
+        frontend.on('error', (error) => {
+            logError(`Frontend failed: ${error.message}`);
+        });
+        backend.on('error', (error) => {
+            logError(`Backend failed: ${error.message}`);
         });
 
         // Graceful shutdown
         process.on('SIGINT', () => {
-            logInfo('Shutting down development server...');
-            devProcess.kill('SIGINT');
+            logInfo('Shutting down development servers...');
+            try { frontend.kill('SIGINT'); } catch {}
+            try { backend.kill('SIGINT'); } catch {}
             process.exit(0);
         });
+
+        // Keep parent process alive while children run
+        process.stdin.resume();
 
     } catch (error) {
         logError(`Failed to start dev server: ${error.message}`);

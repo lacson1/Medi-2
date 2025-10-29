@@ -1,16 +1,11 @@
-import { motion } from 'framer-motion';
 import {
   Users,
   Calendar,
   DollarSign,
   RefreshCw,
-  Pill,
-  Clock,
-  Activity
+  Pill
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import OptimizedStatsCard from './OptimizedStatsCard';
 import { useState, useEffect } from 'react';
@@ -24,7 +19,7 @@ interface StreamlinedDashboardProps {
 export default function StreamlinedDashboard({ onRefresh, loading = false }: StreamlinedDashboardProps) {
   const { user } = useAuth();
   const [lastUpdated, setLastUpdated] = useState(new Date());
-  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [autoRefresh] = useState(true);
 
   // Auto-refresh every 30 seconds
   useEffect(() => {
@@ -46,7 +41,6 @@ export default function StreamlinedDashboard({ onRefresh, loading = false }: Str
 
     // Adjust metrics based on time of day and day of week
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-    const isBusinessHours = hour >= 8 && hour <= 17;
     const isPeakHours = hour >= 9 && hour <= 11 || hour >= 14 && hour <= 16;
 
     // Base values with realistic variations
@@ -167,83 +161,70 @@ export default function StreamlinedDashboard({ onRefresh, loading = false }: Str
   };
 
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
-      {/* Header - Clean and Informative */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-8 p-8 bg-white min-h-screen">
+      {/* Header - Minimal and Professional */}
+      <div className="flex items-center justify-between border-b border-gray-200 pb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">{getPersonalizedTitle()}</h1>
-          <p className="text-sm text-gray-600 flex items-center gap-2">
-            <Activity className="w-4 h-4" />
+          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">{getPersonalizedTitle()}</h1>
+          <p className="text-sm text-gray-500 mt-1">
             {getPersonalizedSubtitle()}
-            <Badge variant="outline" className="text-xs">
-              Live Data
-            </Badge>
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-xs text-gray-500">Last updated</p>
-            <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {lastUpdated.toLocaleTimeString()}
+            <p className="text-xs text-gray-400 uppercase tracking-wide">Updated</p>
+            <p className="text-sm font-medium text-gray-700 mt-0.5">
+              {lastUpdated.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
 
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={handleRefresh}
             disabled={loading}
-            className="flex items-center space-x-2"
+            className="text-gray-600 hover:text-gray-900"
           >
             <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
-            <span>Refresh</span>
           </Button>
         </div>
       </div>
 
-      {/* Core Metrics - Clean and Prominent */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Core Metrics - Clean Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {coreMetrics.map((metric) => (
           <OptimizedStatsCard
             key={metric.id}
             {...metric}
             isLoading={loading}
-            showDetails={true}
+            showDetails={false}
           />
         ))}
       </div>
 
-      {/* Quick Actions - Streamlined */}
-      <Card className="border-none shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="w-5 h-5" />
-            Quick Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-2">
-              <Users className="w-6 h-6" />
-              <span className="text-sm">View Patients</span>
-            </Button>
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-2">
-              <Calendar className="w-6 h-6" />
-              <span className="text-sm">Schedule</span>
-            </Button>
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-2">
-              <Pill className="w-6 h-6" />
-              <span className="text-sm">Prescribe</span>
-            </Button>
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center space-y-2">
-              <DollarSign className="w-6 h-6" />
-              <span className="text-sm">Billing</span>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Quick Actions - Minimal */}
+      <div className="border-t border-gray-100 pt-6">
+        <h2 className="text-sm font-medium text-gray-700 mb-4 uppercase tracking-wide">Quick Actions</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Button variant="ghost" className="h-14 flex flex-col items-center justify-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+            <Users className="w-5 h-5" />
+            <span className="text-xs font-medium">View Patients</span>
+          </Button>
+          <Button variant="ghost" className="h-14 flex flex-col items-center justify-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+            <Calendar className="w-5 h-5" />
+            <span className="text-xs font-medium">Schedule</span>
+          </Button>
+          <Button variant="ghost" className="h-14 flex flex-col items-center justify-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+            <Pill className="w-5 h-5" />
+            <span className="text-xs font-medium">Prescribe</span>
+          </Button>
+          <Button variant="ghost" className="h-14 flex flex-col items-center justify-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+            <DollarSign className="w-5 h-5" />
+            <span className="text-xs font-medium">Billing</span>
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

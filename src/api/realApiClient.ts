@@ -84,7 +84,12 @@ class RealApiClient {
   private token: string | null = null;
 
   constructor() {
-    this.baseUrl = (import.meta.env as Record<string, string>)['VITE_API_URL'] || 'http://localhost:3001/api';
+    const envBase = (import.meta.env as Record<string, string>)['VITE_API_BASE_URL']
+      || (import.meta.env as Record<string, string>)['VITE_API_URL']
+      || 'http://localhost:3001/api';
+    // Normalize to ensure single "/api" segment and no trailing slash
+    const trimmed = envBase.replace(/\/$/, '');
+    this.baseUrl = /\/api$/.test(trimmed) ? trimmed : `${trimmed}/api`;
     this.token = localStorage.getItem('auth_token');
   }
 
@@ -115,7 +120,7 @@ class RealApiClient {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json() as T;
+      const data = await response.json() as ApiResponse<T>;
       return data;
     } catch (error) {
       console.error('API request failed:', error);

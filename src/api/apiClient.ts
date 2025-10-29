@@ -438,12 +438,19 @@ export class EnhancedApiClient {
     async healthCheck(): Promise<HealthCheckResult> {
         try {
             const startTime = Date.now();
-            // Use real API client for health check
-            const response = await realApiClient.request<{ status: string }>('/health');
+            // Call the backend root health endpoint (not under /api)
+            const base = (realApiClient as unknown as { baseUrl: string }).baseUrl || 'http://localhost:3001/api';
+            const apiRoot = base.replace(/\/?api$/, '');
+            const resp = await fetch(`${apiRoot}/health`);
             const responseTime = Date.now() - startTime;
 
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}`);
+            }
+
+            const data = await resp.json();
             return {
-                status: response.data?.status === 'healthy' ? 'healthy' : 'unhealthy',
+                status: data?.status === 'healthy' ? 'healthy' : 'unhealthy',
                 responseTime,
                 timestamp: new Date().toISOString()
             };
