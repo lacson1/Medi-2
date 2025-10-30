@@ -33,8 +33,13 @@ import { format, parseISO, differenceInDays, isToday, isAfter } from 'date-fns';
 import PrescriptionManagement from '@/components/prescriptions/PrescriptionManagement';
 import PrescriptionForm from '@/components/prescriptions/PrescriptionForm';
 import EnhancedPrescriptionForm from '@/components/prescriptions/EnhancedPrescriptionForm';
+import PrescriptionDataGrid from '@/components/prescriptions/PrescriptionDataGrid';
+import PrescriptionWizard from '@/components/prescriptions/PrescriptionWizard';
+import CollapsibleAlertBanner from '@/components/prescriptions/CollapsibleAlertBanner';
+import PrescriptionAnalytics from '@/components/prescriptions/PrescriptionAnalytics';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
 
 export default function PrescriptionManagementPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -43,6 +48,7 @@ export default function PrescriptionManagementPage() {
     patient: 'all',
     search: ''
   });
+  const [showWizard, setShowWizard] = useState(false);
   const queryClient = useQueryClient();
 
   // Fetch prescription data
@@ -122,11 +128,18 @@ export default function PrescriptionManagementPage() {
               </Badge>
             </CardTitle>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  queryClient.invalidateQueries({ queryKey: ['prescriptions'] });
+                  toast.success('Prescriptions refreshed');
+                }}
+              >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Refresh
               </Button>
-              <Button onClick={() => setActiveTab('new-prescription')}>
+              <Button onClick={() => setShowWizard(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 New Prescription
               </Button>
@@ -210,27 +223,30 @@ export default function PrescriptionManagementPage() {
         </Card>
       </div>
 
-      {/* Alerts */}
+      {/* Enhanced Alerts Banner */}
       {(dashboardMetrics.criticalAlerts > 0 || dashboardMetrics.refillsDue > 0) && (
-        <div className="space-y-2">
-          {dashboardMetrics.criticalAlerts > 0 && (
-            <Alert className="border-red-200 bg-red-50">
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-800">
-                <strong>Critical:</strong> {dashboardMetrics.criticalAlerts} prescriptions require immediate attention due to drug interactions or patient allergies.
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {dashboardMetrics.refillsDue > 0 && (
-            <Alert className="border-orange-200 bg-orange-50">
-              <Clock className="h-4 w-4 text-orange-600" />
-              <AlertDescription className="text-orange-800">
-                <strong>Notice:</strong> {dashboardMetrics.refillsDue} prescriptions are due for refills within the next 3 days.
-              </AlertDescription>
-            </Alert>
-          )}
-        </div>
+        <CollapsibleAlertBanner
+          alerts={[
+            ...(dashboardMetrics.criticalAlerts > 0 ? [{
+              id: 'critical-alerts',
+              type: 'critical' as const,
+              title: 'Critical Prescriptions Require Attention',
+              message: `${dashboardMetrics.criticalAlerts} prescriptions require immediate attention due to drug interactions or patient allergies.`,
+              count: dashboardMetrics.criticalAlerts,
+              actionLabel: 'Review Now',
+              onAction: () => {
+                setActiveTab('prescriptions');
+              },
+            }] : []),
+            ...(dashboardMetrics.refillsDue > 0 ? [{
+              id: 'refills-due',
+              type: 'warning' as const,
+              title: 'Refills Due Soon',
+              message: `${dashboardMetrics.refillsDue} prescriptions are due for refills within the next 3 days.`,
+              count: dashboardMetrics.refillsDue,
+            }] : []),
+          ]}
+        />
       )}
 
       {/* Main Content Tabs */}
@@ -329,10 +345,32 @@ export default function PrescriptionManagementPage() {
         </TabsContent>
 
         <TabsContent value="prescriptions">
-          <PrescriptionManagement
-            prescriptions={prescriptions || []}
-            patients={patients || []}
-          />
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Pill className="w-5 h-5 text-blue-600" />
+                All Prescriptions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PrescriptionDataGrid
+                prescriptions={prescriptions || []}
+                patients={patients || []}
+                onView={(prescription) => {
+                  // Handle view action
+                  console.log('View prescription:', prescription);
+                }}
+                onEdit={(prescription) => {
+                  // Handle edit action - could open wizard in edit mode
+                  setActiveTab('new-prescription');
+                }}
+                onBulkAction={(action, ids) => {
+                  console.log('Bulk action:', action, ids);
+                  // Handle bulk actions
+                }}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="new-prescription">
@@ -347,7 +385,8 @@ export default function PrescriptionManagementPage() {
               <EnhancedPrescriptionForm
                 onSubmit={(data) => {
                   console.log('Enhanced prescription submitted:', data);
-                  // Here you would typically save the prescription
+                  toast.success('Prescription created successfully');
+                  queryClient.invalidateQueries({ queryKey: ['prescriptions'] });
                   setActiveTab('prescriptions'); // Switch back to prescriptions tab
                 }}
                 onCancel={() => setActiveTab('prescriptions')}
@@ -395,21 +434,10 @@ export default function PrescriptionManagementPage() {
         </TabsContent>
 
         <TabsContent value="analytics">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-blue-600" />
-                Prescription Analytics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12 text-gray-500">
-                <BarChart3 className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <p>Advanced analytics coming soon</p>
-                <p className="text-sm">Comprehensive reporting and insights on prescription patterns</p>
-              </div>
-            </CardContent>
-          </Card>
+          <PrescriptionAnalytics
+            prescriptions={prescriptions || []}
+            patients={patients || []}
+          />
         </TabsContent>
 
         <TabsContent value="settings">
@@ -430,6 +458,19 @@ export default function PrescriptionManagementPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Prescription Wizard Modal */}
+      <PrescriptionWizard
+        open={showWizard}
+        onOpenChange={setShowWizard}
+        onSubmit={(data) => {
+          console.log('Wizard prescription submitted:', data);
+          toast.success('Prescription created successfully');
+          queryClient.invalidateQueries({ queryKey: ['prescriptions'] });
+          setShowWizard(false);
+        }}
+        patients={patients || []}
+      />
     </div>
   );
 }

@@ -39,6 +39,7 @@ import LabAnalytics from '@/components/labs/LabAnalytics';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LabResult } from '@/api/entities';
+import LabOrdersDashboard from '@/components/labs/LabOrdersDashboard';
 
 const TEST_CATEGORIES = {
   hematology: { label: 'Hematology', icon: TestTube, color: 'bg-red-100 text-red-800' },
@@ -268,6 +269,11 @@ export default function LabOrders() {
   return (
     <div className="p-6 min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
+        {/* Modernized Dashboard (2025 UI) */}
+        <div className="mb-8">
+          <LabOrdersDashboard onNavigateToPatient={(id) => (window.location.href = `/patients/${id}?tab=labs`)} />
+        </div>
+
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
